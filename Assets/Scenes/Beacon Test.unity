@@ -194,6 +194,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ead3041221e48f40b610d4906d648da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  beacon: {fileID: 1925729269249452, guid: afafa87d193f47e40ad5e4d0f61738a3, type: 2}
 --- !u!1 &491970334
 GameObject:
   m_ObjectHideFlags: 0
@@ -250,6 +251,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ead3041221e48f40b610d4906d648da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  beacon: {fileID: 0}
 --- !u!4 &710888729
 Transform:
   m_ObjectHideFlags: 0
@@ -501,6 +503,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ead3041221e48f40b610d4906d648da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  beacon: {fileID: 0}
 --- !u!1001 &1997467179
 Prefab:
   m_ObjectHideFlags: 0

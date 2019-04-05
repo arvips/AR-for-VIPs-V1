@@ -7,7 +7,7 @@ using HoloToolkit.Unity.SpatialMapping;
 
 public class ShootBeacon : MonoBehaviour, IInputClickHandler {
 
-    //public GameObject SpatialMapping;
+    public GameObject beacon; 
 
 	// Use this for initialization
 	void Start () {
@@ -26,15 +26,27 @@ public class ShootBeacon : MonoBehaviour, IInputClickHandler {
         var gazeDirection = Camera.main.transform.forward;
 
 
-        /*
+        
         RaycastHit hitInfo;
 
         if (Physics.Raycast(headPosition, gazeDirection, out hitInfo,
-            30.0f, SpatialMapping.PhysicsRaycastMask))
+            30.0f))
         {
+            //Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * hitInfo.distance, Color.yellow);
+            Debug.Log("Did Hit");
+            Debug.Log("Hit point: " + hitInfo.point);
+            Debug.Log("Hit transform: " + hitInfo.transform);
+
+            //Instantiate Beacon
+            GameObject beaconClone = Instantiate(beacon, hitInfo.point, Quaternion.identity);
 
         }
-        */
+        else
+        {
+            Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * 1000, Color.white);
+            Debug.Log("Did not Hit");
+        }
+
 
         eventData.Use(); // Mark the event as used, so it doesn't fall through to other handlers.
     }

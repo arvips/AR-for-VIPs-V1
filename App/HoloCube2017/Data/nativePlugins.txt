@@ -1,5 +1,6 @@
 PlaneFinding.dll
 MicStreamSelector.dll
+QRCodesTrackerPlugin.dll
 GpuTiming.dll
 SharingClient.dll
 SpatialUnderstanding.dll
