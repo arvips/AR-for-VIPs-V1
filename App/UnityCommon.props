@@ -1,0 +1,9 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <UnityWSASolutionName>HoloCube2017</UnityWSASolutionName>
+        <UnityWSASolutionDir>C:\Users\vrab\Desktop\AR for VIPs\Mesh Manipulation\Mesh-Manipulation\App\</UnityWSASolutionDir>
+        <UnityProjectDir>C:\Users\vrab\Desktop\AR for VIPs\Mesh Manipulation\Mesh-Manipulation\</UnityProjectDir>
+        <UnityWSAPlayerDir>C:\Program Files\Unity\Hub\Editor\2017.4.24f1\Editor\Data\PlaybackEngines\MetroSupport\</UnityWSAPlayerDir>
+        <UnityWSAToolsDir>$(UnityWSASolutionDir)Unity\Tools\</UnityWSAToolsDir>
+    </PropertyGroup>
+</Project>
