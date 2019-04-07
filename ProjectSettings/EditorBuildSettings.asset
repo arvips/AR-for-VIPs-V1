@@ -8,6 +8,9 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/Main.unity
     guid: c71231cfe35adc04da6f598fe0ddd8a4
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Beacon Test.unity
     guid: c7b9431c38db8b341b31360946f50da5
+  - enabled: 1
+    path: Assets/Scenes/Control Test.unity
+    guid: 8a484a6bf5d33e34d8695417646f774f

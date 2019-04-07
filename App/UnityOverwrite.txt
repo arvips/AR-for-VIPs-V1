@@ -5,18 +5,16 @@
 # Write a line equal to 'overwrite-all' (without quotes) to overwrite everything (preserved accross builds)
 # Write a line equal to 'keep-all' (without quotes) to keep files regardless their modification (preserved accross builds)
 # Default behavior is to never overwrite files
-HoloCube2017.sln: modified
-GeneratedProjects\UWP\Assembly-CSharp\project.json: 1D02BC64BAC0D041019673A1C4C51737
-HoloCube2017\App.cs: A12BDE995211E1972B8FB6C7330B852E
-HoloCube2017\HoloCube2017.csproj: FFE632BFFF2225445DEFE156901A4007
-HoloCube2017\HoloCube2017.csproj.user: modified
-HoloCube2017\Package.appxmanifest: FF7017BE2D2A5E765D1BF1E535F37A04
-HoloCube2017\project.json: 1D02BC64BAC0D041019673A1C4C51737
-HoloCube2017\Assets\SplashScreen.scale-200.png: A85C1D7624B6902CF8CEBD6F0200A826
-HoloCube2017\Assets\Square150x150Logo.scale-200.png: E02834B4A5DFB97FF8E212C1CACBB084
-HoloCube2017\Assets\Square44x44Logo.scale-200.png: 6C6EF27184ABE9D870A9D564953775DE
-HoloCube2017\Assets\Square44x44Logo.targetsize-24_altform-unplated.png: 156637F7B5363E983E7A46D8E533A23D
-HoloCube2017\Assets\StoreLogo.png: 90BD194CA4A7CFFF3E8B8222229857FB
-HoloCube2017\Assets\Wide310x150Logo.scale-200.png: C96846A80DF667F87355569CD816192D
-HoloCube2017\obj\x86\Debug\HoloCube2017.csproj.CopyComplete: D41D8CD98F00B204E9800998ECF8427E
-HoloCube2017\Properties\Default.rd.xml: 72EB282657164E79A1C42F6240984826
+AR for VIPs 04_07_19.sln: 8A162077F345D858AF1990661856D4BE
+AR for VIPs 04_07_19\App.cs: AEF115BFCD61AD4D0D69FE47DC880508
+AR for VIPs 04_07_19\AR for VIPs 04_07_19.csproj: 1B7D3FB6A58EF20657B5555315DA315E
+AR for VIPs 04_07_19\AR for VIPs 04_07_19.csproj.user: BEFB8AC4886C4CFDD3C68445D6F19B04
+AR for VIPs 04_07_19\Package.appxmanifest: E50F6E02E9DF50E76DCD4B891AD20E07
+AR for VIPs 04_07_19\project.json: 1D02BC64BAC0D041019673A1C4C51737
+AR for VIPs 04_07_19\Assets\SplashScreen.scale-200.png: A85C1D7624B6902CF8CEBD6F0200A826
+AR for VIPs 04_07_19\Assets\Square150x150Logo.scale-200.png: E02834B4A5DFB97FF8E212C1CACBB084
+AR for VIPs 04_07_19\Assets\Square44x44Logo.scale-200.png: 6C6EF27184ABE9D870A9D564953775DE
+AR for VIPs 04_07_19\Assets\Square44x44Logo.targetsize-24_altform-unplated.png: 156637F7B5363E983E7A46D8E533A23D
+AR for VIPs 04_07_19\Assets\StoreLogo.png: 90BD194CA4A7CFFF3E8B8222229857FB
+AR for VIPs 04_07_19\Assets\Wide310x150Logo.scale-200.png: C96846A80DF667F87355569CD816192D
+AR for VIPs 04_07_19\Properties\Default.rd.xml: 72EB282657164E79A1C42F6240984826
