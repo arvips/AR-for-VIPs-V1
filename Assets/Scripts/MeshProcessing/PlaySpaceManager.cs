@@ -16,6 +16,9 @@ public class PlaySpaceManager : Singleton<PlaySpaceManager>
     [Tooltip("How much time (in seconds) that the SurfaceObserver will run after being started; used when 'Limit Scanning By Time' is checked.")]
     public float scanTime = 30.0f;
 
+    [Tooltip("How much time (in seconds) to wait between scans.")]
+    public float scanInterval = 5.0f;
+
     [Tooltip("Material to use when rendering Spatial Mapping meshes while the observer is running.")]
     public Material defaultMaterial;
 
@@ -77,14 +80,16 @@ public class PlaySpaceManager : Singleton<PlaySpaceManager>
                 {
                     // 3.a: If running, Stop the observer by calling
                     // StopObserver() on the SpatialMappingManager.Instance.
-                    SpatialMappingManager.Instance.StopObserver();
+                    SpatialMappingManager.Instance.StopObserver();            //STOPPED STOPPING OF THE SPATIAL OBSERVER
                 }
 
                 // 3.a: Call CreatePlanes() to generate planes.
                 CreatePlanes();
 
                 // 3.a: Set meshesProcessed to true.
-                meshesProcessed = true;
+                meshesProcessed = true;                                       //DON'T MARK "MESHES PROCESSED" AS TRUE SO IT WILL KEEP ANALYZING
+
+                //scanTime += scanInterval;                                       //ADD "SCAN INTERVAL" AMOUNT OF TIME TO THE CLOCK, SO IT WILL SCAN AGAIN THEN
             }
         }
     }
@@ -156,7 +161,7 @@ public class PlaySpaceManager : Singleton<PlaySpaceManager>
     /// <summary>
     /// Creates planes from the spatial mapping surfaces.
     /// </summary>
-    private void CreatePlanes()
+    public void CreatePlanes()
     {
         // Generate planes based on the spatial map.
         SurfaceMeshesToPlanes surfaceToPlanes = SurfaceMeshesToPlanes.Instance;
@@ -179,10 +184,12 @@ public class PlaySpaceManager : Singleton<PlaySpaceManager>
         }
     }
 
-    /// <summary>
-    /// Called when the GameObject is unloaded.
-    /// </summary>
+#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
+                              /// <summary>
+                              /// Called when the GameObject is unloaded.
+                              /// </summary>
     private void OnDestroy()
+#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
     {
         if (SurfaceMeshesToPlanes.Instance != null)
         {

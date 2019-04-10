@@ -6,7 +6,7 @@ using HoloToolkit.Unity.InputModule;
 using UnityEngine.UI;
 using UnityEngine.XR.WSA.Input;
 using System;
-using PhotoManager
+//using PhotoManager;
 
 /// <summary>
 /// Control Script should take in inputs (primarily voice) and use them to trigger the three main commands: Obstacles, Locate Text, and Read Text.
@@ -30,25 +30,35 @@ public class ControlScript : MonoBehaviour {
    
     public GestureRecognizer gestureRec;
 
+    [Tooltip("Spatial Processing object.")]
+    public GameObject spatialProcessing;
+
     [Tooltip("Parent object of spawned obstacle beacons.")]
     public GameObject obstacleBeaconManager;
 
     [Tooltip("Parent object of spawned text beacons.")]
     public GameObject textBeaconManager;
 
+    [Tooltip("Test object will change color when one of the three core commands are input.")]
+    public GameObject testCube;
+
+    private int tapCount = 1;
+
     void Start () {
 
         //Start a gesture recognizer to look for the Tap gesture
         gestureRec = new GestureRecognizer();
 
+        //"Manipulation" seems to be overriding tap and hold, so temporarily adjusting to a simple rotate-through using tap; tap once for obstacles, again for locate text, again for read text, repeat
+
         gestureRec.Tapped += Tap;
-        gestureRec.HoldStarted += HoldStarted;
-        gestureRec.ManipulationStarted += ManipulationStarted;
+        //gestureRec.HoldCompleted += HoldCompleted;
+        //gestureRec.ManipulationCompleted += ManipulationCompleted;
 
         gestureRec.SetRecognizableGestures(GestureSettings.Tap);
         //gestureRec.SetRecognizableGestures(GestureSettings.DoubleTap);
-        gestureRec.SetRecognizableGestures(GestureSettings.Hold);
-        gestureRec.SetRecognizableGestures(GestureSettings.ManipulationTranslate);
+        //gestureRec.SetRecognizableGestures(GestureSettings.Hold);
+        //gestureRec.SetRecognizableGestures(GestureSettings.ManipulationTranslate);
 
         gestureRec.StartCapturingGestures();
         Debug.Log("Gesture Recognizer Initialized");
@@ -59,8 +69,8 @@ public class ControlScript : MonoBehaviour {
     {
         //unsubscribe from event
         gestureRec.Tapped -= Tap;
-        gestureRec.HoldStarted -= HoldStarted;
-        gestureRec.ManipulationStarted -= ManipulationStarted;
+        //gestureRec.HoldCompleted -= HoldCompleted;
+        //gestureRec.ManipulationCompleted -= ManipulationCompleted;
     }
 
     #endregion
@@ -69,20 +79,36 @@ public class ControlScript : MonoBehaviour {
     #region **GESTURE CONTROLS**
     public void Tap(TappedEventArgs args) //(InteractionSourceKind source, int tapCount, Ray headRay) //(InteractionSource source, InteractionSourcePose sourcePose, Pose headPose, int tapCount) 
     {
-        //On Tap, activate "Obstacles" command
-        Obstacles();
+        //On Tap, activate current command
+        if (tapCount == 1)
+        {
+            Obstacles();
+            tapCount++;
+        }
+
+        else if (tapCount == 2)
+        {
+            LocateText();
+            tapCount++;
+        }
+
+        else
+        {
+            ReadText();
+            tapCount = 1;
+        }
 
         Debug.Log("Tap event registered");
     }
 
-    public void HoldStarted (HoldStartedEventArgs args)
+    public void HoldCompleted(HoldCompletedEventArgs args)
     {
         //On Hold, activate "Locate Text" command
         LocateText();
         Debug.Log("Hold Started event registered");
     }
 
-    public void ManipulationStarted (ManipulationStartedEventArgs args)
+    public void ManipulationCompleted(ManipulationCompletedEventArgs args)
     {
         //On Manipulation (tap and move), activate "Read Text" command
         ReadText();
@@ -98,7 +124,12 @@ public class ControlScript : MonoBehaviour {
     public void Obstacles ()
     {
         Debug.Log("Obstacles command activated");
+        testCube.GetComponent<Renderer>().material.color = Color.red;
 
+        //Create planes
+        //spatialProcessing.GetComponent<PlaySpaceManager>().CreatePlanes();
+
+        //Shoot cone of beacons
         GetComponentInParent<ShootCone>().ConeShot();
 
     }
@@ -106,13 +137,17 @@ public class ControlScript : MonoBehaviour {
     public void LocateText ()
     {
         Debug.Log("Locate Text command activated");
-        PhotoManager.Start()
+        testCube.GetComponent<Renderer>().material.color = Color.blue;
+
+        //GetComponentInParent<PhotoManager>().Start();
 
     }
 
     public void ReadText ()
     {
         Debug.Log("Read Text command activated");
+        testCube.GetComponent<Renderer>().material.color = Color.green;
+
 
     }
 

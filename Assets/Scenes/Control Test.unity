@@ -176,7 +176,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
 --- !u!1 &112487223
 GameObject:
@@ -234,6 +234,7 @@ Transform:
   - {fileID: 1997467180}
   - {fileID: 930581584}
   - {fileID: 710888729}
+  - {fileID: 676450827}
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -266,8 +267,18 @@ Transform:
   - {fileID: 2097662778}
   - {fileID: 112487224}
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &676450823 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1297166865026352, guid: a4b9db0d4654953439c842581655df0d,
+    type: 2}
+  m_PrefabInternal: {fileID: 1239819179}
+--- !u!4 &676450827 stripped
+Transform:
+  m_PrefabParentObject: {fileID: 4374503763659196, guid: a4b9db0d4654953439c842581655df0d,
+    type: 2}
+  m_PrefabInternal: {fileID: 1239819179}
 --- !u!1 &710888727
 GameObject:
   m_ObjectHideFlags: 0
@@ -412,7 +423,7 @@ MonoBehaviour:
   beacon: {fileID: 1925729269249452, guid: afafa87d193f47e40ad5e4d0f61738a3, type: 2}
   beaconManager: {fileID: 2097662777}
   depth: 10
-  maxBeacons: 100
+  maxBeacons: 30
   deviation: 0.05
 --- !u!114 &710888732
 MonoBehaviour:
@@ -426,8 +437,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inspectorField: 1440
+  spatialProcessing: {fileID: 676450823}
   obstacleBeaconManager: {fileID: 2097662777}
   textBeaconManager: {fileID: 112487223}
+  testCube: {fileID: 1821024449}
 --- !u!1 &930581583
 GameObject:
   m_ObjectHideFlags: 0
@@ -497,7 +510,7 @@ Prefab:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    m_TransformParent: {fileID: 0}
+    m_TransformParent: {fileID: 240992963}
     m_Modifications:
     - target: {fileID: 4374503763659196, guid: a4b9db0d4654953439c842581655df0d, type: 2}
       propertyPath: m_LocalPosition.x
@@ -513,15 +526,15 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4374503763659196, guid: a4b9db0d4654953439c842581655df0d, type: 2}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 4374503763659196, guid: a4b9db0d4654953439c842581655df0d, type: 2}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 4374503763659196, guid: a4b9db0d4654953439c842581655df0d, type: 2}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 4374503763659196, guid: a4b9db0d4654953439c842581655df0d, type: 2}
       propertyPath: m_LocalRotation.w
@@ -529,7 +542,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4374503763659196, guid: a4b9db0d4654953439c842581655df0d, type: 2}
       propertyPath: m_RootOrder
-      value: 4
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 114174504419642454, guid: a4b9db0d4654953439c842581655df0d,
         type: 2}
@@ -714,7 +727,7 @@ GameObject:
   - component: {fileID: 1821024451}
   - component: {fileID: 1821024454}
   m_Layer: 0
-  m_Name: Cube
+  m_Name: Test Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -747,7 +760,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: 64165286eff98134b82f4a6081c52d0f, type: 2}
+  - {fileID: 2100000, guid: 67dd3ea9a59f8fb48a5a4a7d10f2a97f, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
