@@ -6,6 +6,7 @@ using HoloToolkit.Unity.InputModule;
 using UnityEngine.UI;
 using UnityEngine.XR.WSA.Input;
 using System;
+using PhotoManager
 
 /// <summary>
 /// Control Script should take in inputs (primarily voice) and use them to trigger the three main commands: Obstacles, Locate Text, and Read Text.
@@ -105,7 +106,7 @@ public class ControlScript : MonoBehaviour {
     public void LocateText ()
     {
         Debug.Log("Locate Text command activated");
-
+        PhotoManager.Start()
 
     }
 
