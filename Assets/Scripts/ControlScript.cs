@@ -22,12 +22,17 @@ public class ControlScript : MonoBehaviour {
 #if UNITY_EDITOR
     [Help("\nHOW TO USE CONTROL SCRIPT\n\n1. Attach relevent scripts to the Script Manager\n\n2. Open Control Script in editor\n\n3. Adjust the Core Commands (Obstacles, LocateText, and ReadText functions) to use the attached scripts\n", UnityEditor.MessageType.Info)]
 #endif
+    [Tooltip("Necessary for help field above to appear.")]
     float inspectorField = 1440f; //without this, help field goes away
 
     #region **INITIALIZATION**
-
+   
     public GestureRecognizer gestureRec;
+
+    [Tooltip("Parent object of spawned obstacle beacons.")]
     public GameObject obstacleBeaconManager;
+
+    [Tooltip("Parent object of spawned text beacons.")]
     public GameObject textBeaconManager;
 
     void Start () {
@@ -63,7 +68,7 @@ public class ControlScript : MonoBehaviour {
     #region **GESTURE CONTROLS**
     public void Tap(TappedEventArgs args) //(InteractionSourceKind source, int tapCount, Ray headRay) //(InteractionSource source, InteractionSourcePose sourcePose, Pose headPose, int tapCount) 
     {
-        //On Tap, activate "obstacles" command
+        //On Tap, activate "Obstacles" command
         Obstacles();
 
         Debug.Log("Tap event registered");
@@ -93,7 +98,7 @@ public class ControlScript : MonoBehaviour {
     {
         Debug.Log("Obstacles command activated");
 
-        GetComponentInParent<ShootBeacon>().SingleShot();
+        GetComponentInParent<ShootCone>().ConeShot();
 
     }
 

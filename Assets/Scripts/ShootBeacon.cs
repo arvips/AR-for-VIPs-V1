@@ -7,7 +7,10 @@ using HoloToolkit.Unity.SpatialMapping;
 
 public class ShootBeacon : MonoBehaviour {
 
+    [Tooltip("Beacon prefab to use.")]
     public GameObject beacon;
+
+    [Tooltip("This object will be the parent for all spawned beacons.")]
     public GameObject beaconManager;
 
 	// Use this for initialization

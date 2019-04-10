@@ -153,33 +153,39 @@ namespace HoloToolkit.Unity.SpatialMapping
             {
                 // If we have a horizontal surface with a normal pointing up, classify it as a floor.
                 PlaneType = PlaneTypes.Floor;
+                gameObject.tag = "Floor";
 
                 if (gameObject.transform.position.y > (floorYPosition + FloorBuffer))
                 {
                     // If the plane is too high to be considered part of the floor, classify it as a table.
                     PlaneType = PlaneTypes.Table;
+                    gameObject.tag = "Table";
                 }
             }
             else if (SurfaceNormal.y <= -(UpNormalThreshold))
             {
                 // If we have a horizontal surface with a normal pointing down, classify it as a ceiling.
                 PlaneType = PlaneTypes.Ceiling;
+                gameObject.tag = "Ceiling";
 
                 if (gameObject.transform.position.y < (ceilingYPosition - CeilingBuffer))
                 {
                     // If the plane is not high enough to be considered part of the ceiling, classify it as a table.
                     PlaneType = PlaneTypes.Table;
+                    gameObject.tag = "Table";
                 }
             }
             else if (Mathf.Abs(SurfaceNormal.y) <= (1 - UpNormalThreshold))
             {
                 // If the plane is vertical, then classify it as a wall.
                 PlaneType = PlaneTypes.Wall;
+                gameObject.tag = "Wall";
             }
             else
             {
                 // The plane has a strange angle, classify it as 'unknown'.
                 PlaneType = PlaneTypes.Unknown;
+                gameObject.tag = "Unknown";
             }
         }
 
