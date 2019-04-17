@@ -16,13 +16,13 @@ GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 4000012375631134}
-  - 33: {fileID: 33000012042644992}
-  - 65: {fileID: 65000010549037612}
-  - 23: {fileID: 23000010797497162}
-  - 114: {fileID: 114000011287056714}
+  - component: {fileID: 4000012375631134}
+  - component: {fileID: 33000012042644992}
+  - component: {fileID: 65000010549037612}
+  - component: {fileID: 23000010797497162}
+  - component: {fileID: 114000011287056714}
   m_Layer: 0
   m_Name: SurfacePlane
   m_TagString: Untagged
@@ -39,10 +39,10 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!23 &23000010797497162
 MeshRenderer:
   m_ObjectHideFlags: 1
@@ -51,13 +51,16 @@ MeshRenderer:
   m_GameObject: {fileID: 1000010593991404}
   m_Enabled: 1
   m_CastShadows: 1
-  m_ReceiveShadows: 1
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
   - {fileID: 2100000, guid: 474f0e0481d4aa14e92a5ada98042f3a, type: 2}
-  m_SubsetIndices: 
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
   m_StaticBatchRoot: {fileID: 0}
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
@@ -65,12 +68,14 @@ MeshRenderer:
   m_PreserveUVs: 1
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
-  m_SelectedWireframeHidden: 0
+  m_StitchLightmapSeams: 0
+  m_SelectedEditorRenderState: 3
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
+  m_SortingLayer: 0
   m_SortingOrder: 0
 --- !u!33 &33000012042644992
 MeshFilter:
@@ -106,9 +111,9 @@ MonoBehaviour:
   UpNormalThreshold: 0.9
   FloorBuffer: 0.1
   CeilingBuffer: 0.1
-  WallMaterial: {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
-  FloorMaterial: {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
-  CeilingMaterial: {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
-  TableMaterial: {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
-  UnknownMaterial: {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  WallMaterial: {fileID: 2100000, guid: 729453690df4d40488b01b78b3af849d, type: 2}
+  FloorMaterial: {fileID: 2100000, guid: fbf257934a1d39c4fa55a2650bdb9404, type: 2}
+  CeilingMaterial: {fileID: 2100000, guid: fbf257934a1d39c4fa55a2650bdb9404, type: 2}
+  TableMaterial: {fileID: 2100000, guid: e827643d824e30549b8768a19ebf7dc2, type: 2}
+  UnknownMaterial: {fileID: 2100000, guid: 729453690df4d40488b01b78b3af849d, type: 2}
   PlaneType: 16

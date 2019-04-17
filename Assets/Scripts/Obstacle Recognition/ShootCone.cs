@@ -7,8 +7,11 @@ using HoloToolkit.Unity.SpatialMapping;
 
 public class ShootCone : MonoBehaviour {
 
-    [Tooltip("Beacon prefab to use.")]
-    public GameObject beacon;
+    [Tooltip("Obstacle beacon prefab to use.")]
+    public GameObject obstacleBeacon;
+
+    [Tooltip("Wall beacon prefab to use.")]
+    public GameObject wallBeacon;
 
     [Tooltip("This object will be the parent for all spawned beacons.")]
     public GameObject beaconManager;
@@ -39,19 +42,29 @@ public class ShootCone : MonoBehaviour {
         var headPosition = Camera.main.transform.position;
         var gazeDirection = Camera.main.transform.forward;
 
-        RaycastHit hitInfo;
+        RaycastHit hit;
 
-        if (Physics.Raycast(headPosition, gazeDirection, out hitInfo,
+        if (Physics.Raycast(headPosition, gazeDirection, out hit,
             30.0f))
         {
             //Debug
             //Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * hitInfo.distance, Color.yellow);
             //Debug.Log("Did Hit");
-            Debug.Log("Beacon hit at location: " + hitInfo.point);
+            Debug.Log("Beacon hit at location: " + hit.point);
             //Debug.Log("Hit transform: " + hitInfo.transform);
 
-            //Instantiate Beacon
-            Instantiate(beacon, hitInfo.point, Quaternion.identity, beaconManager.transform);
+            if (hit.transform.gameObject.tag == "Wall")
+            {
+                //If a wall is hit, instantiate a wall beacon
+                Instantiate(wallBeacon, hit.point, Quaternion.identity, beaconManager.transform);
+
+            }
+
+            else
+            {
+                //Otherwise, instantiate an obstacle beacon
+                Instantiate(obstacleBeacon, hit.point, Quaternion.identity, beaconManager.transform);
+            }
 
         }
         else
@@ -98,10 +111,18 @@ public class ShootCone : MonoBehaviour {
                 {
                     Debug.Log("Hit floor or ceiling");
                 }
+
+                else if (hit.transform.gameObject.tag == "Wall")
+                {
+                    //If a wall is hit, instantiate a wall beacon
+                    Instantiate(wallBeacon, hit.point, Quaternion.identity, beaconManager.transform);
+
+                }
+
                 else
                 {
-                    //Instantiate Beacon
-                    Instantiate(beacon, hit.point, Quaternion.identity, beaconManager.transform);
+                    //Otherwise, instantiate an obstacle beacon
+                    Instantiate(obstacleBeacon, hit.point, Quaternion.identity, beaconManager.transform);
                 }
             }
 

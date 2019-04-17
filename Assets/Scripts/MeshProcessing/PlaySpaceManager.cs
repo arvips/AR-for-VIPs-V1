@@ -16,8 +16,8 @@ public class PlaySpaceManager : Singleton<PlaySpaceManager>
     [Tooltip("How much time (in seconds) that the SurfaceObserver will run after being started; used when 'Limit Scanning By Time' is checked.")]
     public float scanTime = 30.0f;
 
-    [Tooltip("How much time (in seconds) to wait between scans.")]
-    public float scanInterval = 5.0f;
+    //[Tooltip("How much time (in seconds) to wait between scans.")]
+    //public float scanInterval = 5.0f;
 
     [Tooltip("Material to use when rendering Spatial Mapping meshes while the observer is running.")]
     public Material defaultMaterial;
@@ -184,10 +184,52 @@ public class PlaySpaceManager : Singleton<PlaySpaceManager>
         }
     }
 
+
+    public void ProcessMesh()
+    {
+        //On command, stop the observer, create the planes, and set "meshesProcessed" to true
+        if (!meshesProcessed)
+        {
+            if (SpatialMappingManager.Instance.IsObserverRunning())
+            {
+                // 3.a: If running, Stop the observer by calling
+                // StopObserver() on the SpatialMappingManager.Instance.
+                SpatialMappingManager.Instance.StopObserver();            //STOPPED STOPPING OF THE SPATIAL OBSERVER
+            }
+
+            // 3.a: Call CreatePlanes() to generate planes.
+            CreatePlanes();
+
+            // 3.a: Set meshesProcessed to true.
+            meshesProcessed = true;                                       //DON'T MARK "MESHES PROCESSED" AS TRUE SO IT WILL KEEP ANALYZING
+        }      
+    }
+
+    public void RestartScanning()
+    {
+        // Remove any previously existing planes, as they may no longer be valid.
+        SurfaceMeshesToPlanes surfaceToPlanes = SurfaceMeshesToPlanes.Instance;
+        surfaceToPlanes.RemovePlanes();
+        meshesProcessed = false;
+        if (!SpatialMappingManager.Instance.IsObserverRunning())
+        {
+            SpatialMappingManager.Instance.StartObserver();
+        }
+
+    }
+
+
+
+
+
+
+
+
+
 #pragma warning disable CS0114 // Member hides inherited member; missing override keyword
-                              /// <summary>
-                              /// Called when the GameObject is unloaded.
-                              /// </summary>
+    /// <summary>
+    /// Called when the GameObject is unloaded.
+    /// </summary>
     private void OnDestroy()
 #pragma warning restore CS0114 // Member hides inherited member; missing override keyword
     {

@@ -145,13 +145,19 @@ namespace HoloToolkit.Unity.SpatialMapping
         /// Iterator block, analyzes surface meshes to find planes and create new 3D cubes to represent each plane.
         /// </summary>
         /// <returns>Yield result.</returns>
-        private IEnumerator MakePlanesRoutine()
+        /// 
+
+        public void RemovePlanes()
         {
-            // Remove any previously existing planes, as they may no longer be valid.
             for (int index = 0; index < ActivePlanes.Count; index++)
             {
                 Destroy(ActivePlanes[index]);                                             //CANCEL DESTRUCTION OF PREVIOUS PLANES
             }
+        }
+        private IEnumerator MakePlanesRoutine()
+        {
+            // Remove any previously existing planes, as they may no longer be valid.
+            RemovePlanes();
 
             // Pause our work, and continue on the next frame.
             yield return null;

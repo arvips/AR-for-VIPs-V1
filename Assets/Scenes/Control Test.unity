@@ -238,6 +238,42 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &345990015
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 345990016}
+  - component: {fileID: 345990017}
+  m_Layer: 0
+  m_Name: CameraAudioListener
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &345990016
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 345990015}
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1544193971}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
+--- !u!81 &345990017
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 345990015}
+  m_Enabled: 1
 --- !u!1 &491970334
 GameObject:
   m_ObjectHideFlags: 0
@@ -377,12 +413,148 @@ MonoBehaviour:
           m_CallState: 2
       m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
-  - Keyword: clear text beacons
+  - Keyword: clear text
     Response:
       m_PersistentCalls:
         m_Calls:
         - m_Target: {fileID: 710888732}
           m_MethodName: ClearTextBeacons
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - Keyword: shoot beacon
+    Response:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 710888730}
+          m_MethodName: SingleShot
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - Keyword: clear beacons
+    Response:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 710888732}
+          m_MethodName: ClearObstacleBeacons
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - Keyword: max beacons up
+    Response:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 710888732}
+          m_MethodName: MaxBeaconsAdjust
+          m_Mode: 6
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 1
+          m_CallState: 2
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - Keyword: max beacons down
+    Response:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 710888732}
+          m_MethodName: MaxBeaconsAdjust
+          m_Mode: 6
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - Keyword: deviation up
+    Response:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 710888732}
+          m_MethodName: DeviationAdjust
+          m_Mode: 6
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 1
+          m_CallState: 2
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - Keyword: deviation down
+    Response:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 710888732}
+          m_MethodName: DeviationAdjust
+          m_Mode: 6
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - Keyword: process mesh
+    Response:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 710888732}
+          m_MethodName: ProcessMesh
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - Keyword: restart scanning
+    Response:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 710888732}
+          m_MethodName: RestartScanning
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -420,11 +592,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9df9f373c5d7614d882d2054bfc295f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  beacon: {fileID: 1925729269249452, guid: afafa87d193f47e40ad5e4d0f61738a3, type: 2}
+  obstacleBeacon: {fileID: 1925729269249452, guid: afafa87d193f47e40ad5e4d0f61738a3,
+    type: 2}
+  wallBeacon: {fileID: 1925729269249452, guid: f531241af780dde40912fa919d026d50, type: 2}
   beaconManager: {fileID: 2097662777}
   depth: 10
-  maxBeacons: 30
-  deviation: 0.05
+  maxBeacons: 200
+  deviation: 2
 --- !u!114 &710888732
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -500,10 +674,26 @@ MonoBehaviour:
     KeyCode: 8
   - Keyword: clear obstacle beacons
     KeyCode: 52
-  - Keyword: clear text beacons
+  - Keyword: clear text
     KeyCode: 61
-  - Keyword: clear text beacons
+  - Keyword: clear text
     KeyCode: 53
+  - Keyword: max beacons up
+    KeyCode: 105
+  - Keyword: max beacons down
+    KeyCode: 107
+  - Keyword: deviation up
+    KeyCode: 108
+  - Keyword: deviation down
+    KeyCode: 106
+  - Keyword: clear beacons
+    KeyCode: 99
+  - Keyword: shoot beacon
+    KeyCode: 98
+  - Keyword: process mesh
+    KeyCode: 56
+  - Keyword: restart scanning
+    KeyCode: 57
   recognitionConfidenceLevel: 1
 --- !u!1001 &1239819179
 Prefab:
@@ -552,7 +742,7 @@ Prefab:
     - target: {fileID: 114206805714726068, guid: a4b9db0d4654953439c842581655df0d,
         type: 2}
       propertyPath: MinArea
-      value: 0.025
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 114174504419642454, guid: a4b9db0d4654953439c842581655df0d,
         type: 2}
@@ -567,7 +757,21 @@ Prefab:
     - target: {fileID: 114174504419642454, guid: a4b9db0d4654953439c842581655df0d,
         type: 2}
       propertyPath: limitScanningByTime
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1297166865026352, guid: a4b9db0d4654953439c842581655df0d, type: 2}
+      propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114206805714726068, guid: a4b9db0d4654953439c842581655df0d,
+        type: 2}
+      propertyPath: drawPlanesMask
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 114206805714726068, guid: a4b9db0d4654953439c842581655df0d,
+        type: 2}
+      propertyPath: destroyPlanesMask
+      value: 24
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: a4b9db0d4654953439c842581655df0d, type: 2}
@@ -672,6 +876,11 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2ed75ffdf9031c94e8bce4b3d17b9928, type: 2}
   m_IsPrefabParent: 0
+--- !u!4 &1544193971 stripped
+Transform:
+  m_PrefabParentObject: {fileID: 4587520633816736, guid: d29bc40b7f3df26479d6a0aac211c355,
+    type: 2}
+  m_PrefabInternal: {fileID: 1674130179}
 --- !u!1001 &1674130179
 Prefab:
   m_ObjectHideFlags: 0
@@ -709,6 +918,11 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4541142303025740, guid: d29bc40b7f3df26479d6a0aac211c355, type: 2}
       propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 81867938468442352, guid: d29bc40b7f3df26479d6a0aac211c355,
+        type: 2}
+      propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

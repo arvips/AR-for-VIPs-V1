@@ -9,6 +9,7 @@ TagManager:
   - Wall
   - Unknown
   - Table
+  - CameraManager
   layers:
   - Default
   - TransparentFX

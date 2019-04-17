@@ -6,7 +6,6 @@ using HoloToolkit.Unity.InputModule;
 using UnityEngine.UI;
 using UnityEngine.XR.WSA.Input;
 using System;
-//using PhotoManager;
 
 /// <summary>
 /// Control Script should take in inputs (primarily voice) and use them to trigger the three main commands: Obstacles, Locate Text, and Read Text.
@@ -62,6 +61,7 @@ public class ControlScript : MonoBehaviour {
 
         gestureRec.StartCapturingGestures();
         Debug.Log("Gesture Recognizer Initialized");
+        LocateText();
 
     }
 
@@ -138,8 +138,10 @@ public class ControlScript : MonoBehaviour {
     {
         Debug.Log("Locate Text command activated");
         testCube.GetComponent<Renderer>().material.color = Color.blue;
-
-        //GetComponentInParent<PhotoManager>().Start();
+        InputManager go = GetComponent<InputManager>();  //you probably need to actually specify the input manager using transforms
+        Debug.Log(go);
+        
+        //GetComponent<CameraManager>().BeginManualPhotoMode();
 
     }
 
@@ -177,6 +179,65 @@ public class ControlScript : MonoBehaviour {
 
     #endregion
 
+    #region **ADJUST OBSTACLE BEACON CONE**
+    public void MaxBeaconsAdjust (bool up)
+    {
+        //int maxBeacons = GetComponentInParent<ShootCone>().maxBeacons;
 
+        if (up)
+        {
+            GetComponentInParent<ShootCone>().maxBeacons = Mathf.RoundToInt(GetComponentInParent<ShootCone>().maxBeacons * 2f);
+            Debug.Log("Max Beacons Up: " + GetComponentInParent<ShootCone>().maxBeacons);
+        }
+
+        else
+        {
+            GetComponentInParent<ShootCone>().maxBeacons = Mathf.RoundToInt(GetComponentInParent<ShootCone>().maxBeacons / 2f);
+            Debug.Log("Max Beacons Down: " + GetComponentInParent<ShootCone>().maxBeacons);
+        }
+    }
+
+    public void DeviationAdjust (bool wider) {
+        if (wider)
+        {
+            GetComponentInParent<ShootCone>().deviation *= 5f;
+            Debug.Log("Max Beacons Up: " + GetComponentInParent<ShootCone>().maxBeacons);
+        }
+
+        else
+        {
+            GetComponentInParent<ShootCone>().deviation /= 5f;
+            Debug.Log("Max Beacons Down: " + GetComponentInParent<ShootCone>().maxBeacons);
+        }
+        }
+
+
+
+    #endregion
+
+    #region MESH PROCESSING
+    
+    public void ProcessMesh ()
+    {
+        //Stops scanning and creates planes
+        Debug.Log("Process Mesh activated");
+        spatialProcessing.GetComponent<PlaySpaceManager>().ProcessMesh();
+        testCube.GetComponent<Renderer>().material.color = Color.yellow;
+
+    }
+
+    public void RestartScanning ()
+    {
+        //Destroys planes and restarts scanning
+        Debug.Log("Restart Scanning activated");
+        testCube.GetComponent<Renderer>().material.color = Color.cyan;
+        spatialProcessing.GetComponent<PlaySpaceManager>().RestartScanning();
+
+        //Adjustments needed:
+        //1. Adjust meshing behavior to not create walls over doorways
+    }
+
+
+    #endregion
 
 }
