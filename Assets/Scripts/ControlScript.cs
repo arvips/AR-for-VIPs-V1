@@ -32,8 +32,9 @@ public class ControlScript : MonoBehaviour {
     [Tooltip("Spatial Processing object.")]
     public GameObject spatialProcessing;
 
-    [Tooltip("Parent object of spawned obstacle beacons.")]
-    public GameObject obstacleBeaconManager;
+    [Tooltip("Text Manager object.")]
+    public GameObject TextManager;
+
 
     [Tooltip("Parent object of spawned text beacons.")]
     public GameObject textBeaconManager;
@@ -41,7 +42,13 @@ public class ControlScript : MonoBehaviour {
     [Tooltip("Test object will change color when one of the three core commands are input.")]
     public GameObject testCube;
 
+    [Tooltip("This text will change to copy the Debug output.")]
+    public GameObject debugText;
+
     private int tapCount = 1;
+
+    private string output = ""; //helps print text in UI
+    private string stack = "";
 
     void Start () {
 
@@ -61,8 +68,16 @@ public class ControlScript : MonoBehaviour {
 
         gestureRec.StartCapturingGestures();
         Debug.Log("Gesture Recognizer Initialized");
-        LocateText();
 
+    }
+
+    private void Update()
+    {
+    }
+
+    private void OnEnable()
+    {
+        Application.logMessageReceived += HandleLog; //helps print text in UI
     }
 
     void OnDisable()
@@ -71,6 +86,7 @@ public class ControlScript : MonoBehaviour {
         gestureRec.Tapped -= Tap;
         //gestureRec.HoldCompleted -= HoldCompleted;
         //gestureRec.ManipulationCompleted -= ManipulationCompleted;
+        Application.logMessageReceived -= HandleLog;
     }
 
     #endregion
@@ -79,22 +95,16 @@ public class ControlScript : MonoBehaviour {
     #region **GESTURE CONTROLS**
     public void Tap(TappedEventArgs args) //(InteractionSourceKind source, int tapCount, Ray headRay) //(InteractionSource source, InteractionSourcePose sourcePose, Pose headPose, int tapCount) 
     {
-        //On Tap, activate current command
+        //On Tap, turn obstacles on or off.
         if (tapCount == 1)
         {
-            Obstacles();
+            ObstaclesOn();
             tapCount++;
         }
 
         else if (tapCount == 2)
         {
-            LocateText();
-            tapCount++;
-        }
-
-        else
-        {
-            ReadText();
+            ObstaclesOff();
             tapCount = 1;
         }
 
@@ -121,25 +131,30 @@ public class ControlScript : MonoBehaviour {
     //**ADD CORE COMMANDS TO OTHER SCRIPTS ATTACHED TO CONTROL SCRIPT HERE**
     #region **CORE COMMANDS**
 
-    public void Obstacles ()
+    public void ObstaclesOn ()
     {
-        Debug.Log("Obstacles command activated");
+        //Activates obstacles mode. While active, beacons are replaced when necessary to ensure user's surroundings are covered.
+
+        Debug.Log("Obstacle beacons turned on.");
         testCube.GetComponent<Renderer>().material.color = Color.red;
+        GetComponentInParent<ObstacleBeaconScript>().ObstaclesOn();
 
-        //Create planes
-        //spatialProcessing.GetComponent<PlaySpaceManager>().CreatePlanes();
+    }
 
-        //Shoot cone of beacons
-        GetComponentInParent<ShootCone>().ConeShot();
-
+    public void ObstaclesOff()
+    {
+        //Deactivates obstacles mode.
+        Debug.Log("Obstacle beacons turned off.");
+        testCube.GetComponent<Renderer>().material.color = Color.gray;
+        GetComponentInParent<ObstacleBeaconScript>().ObstaclesOff();
     }
 
     public void LocateText ()
     {
         Debug.Log("Locate Text command activated");
         testCube.GetComponent<Renderer>().material.color = Color.blue;
-        InputManager go = GetComponent<InputManager>();  //you probably need to actually specify the input manager using transforms
-        Debug.Log(go);
+        //InputManager go = GetComponent<InputManager>();  //you probably need to actually specify the input manager using transforms
+        TextManager.GetComponent<CameraManager>().BeginManualPhotoMode();
         
         //GetComponent<CameraManager>().BeginManualPhotoMode();
 
@@ -162,10 +177,8 @@ public class ControlScript : MonoBehaviour {
     public void ClearObstacleBeacons ()
     {
         //Destroys all obstacle beacons.
-        foreach (Transform child in obstacleBeaconManager.transform)
-        {
-            Destroy(child.gameObject);
-        }
+        GetComponentInParent<ObstacleBeaconScript>().DeleteBeacons();
+
     }
 
     public void ClearTextBeacons ()
@@ -182,32 +195,32 @@ public class ControlScript : MonoBehaviour {
     #region **ADJUST OBSTACLE BEACON CONE**
     public void MaxBeaconsAdjust (bool up)
     {
-        //int maxBeacons = GetComponentInParent<ShootCone>().maxBeacons;
+        //int maxBeacons = GetComponentInParent<ObstacleBeaconScript>().maxBeacons;
 
         if (up)
         {
-            GetComponentInParent<ShootCone>().maxBeacons = Mathf.RoundToInt(GetComponentInParent<ShootCone>().maxBeacons * 2f);
-            Debug.Log("Max Beacons Up: " + GetComponentInParent<ShootCone>().maxBeacons);
+            GetComponentInParent<ObstacleBeaconScript>().maxBeacons = Mathf.RoundToInt(GetComponentInParent<ObstacleBeaconScript>().maxBeacons * 2f);
+            Debug.Log("Max Beacons Up: " + GetComponentInParent<ObstacleBeaconScript>().maxBeacons);
         }
 
         else
         {
-            GetComponentInParent<ShootCone>().maxBeacons = Mathf.RoundToInt(GetComponentInParent<ShootCone>().maxBeacons / 2f);
-            Debug.Log("Max Beacons Down: " + GetComponentInParent<ShootCone>().maxBeacons);
+            GetComponentInParent<ObstacleBeaconScript>().maxBeacons = Mathf.RoundToInt(GetComponentInParent<ObstacleBeaconScript>().maxBeacons / 2f);
+            Debug.Log("Max Beacons Down: " + GetComponentInParent<ObstacleBeaconScript>().maxBeacons);
         }
     }
 
     public void DeviationAdjust (bool wider) {
         if (wider)
         {
-            GetComponentInParent<ShootCone>().deviation *= 5f;
-            Debug.Log("Max Beacons Up: " + GetComponentInParent<ShootCone>().maxBeacons);
+            GetComponentInParent<ObstacleBeaconScript>().deviation *= 5f;
+            Debug.Log("Max Beacons Up: " + GetComponentInParent<ObstacleBeaconScript>().maxBeacons);
         }
 
         else
         {
-            GetComponentInParent<ShootCone>().deviation /= 5f;
-            Debug.Log("Max Beacons Down: " + GetComponentInParent<ShootCone>().maxBeacons);
+            GetComponentInParent<ObstacleBeaconScript>().deviation /= 5f;
+            Debug.Log("Max Beacons Down: " + GetComponentInParent<ObstacleBeaconScript>().maxBeacons);
         }
         }
 
@@ -240,4 +253,19 @@ public class ControlScript : MonoBehaviour {
 
     #endregion
 
+    #region HOLOLENS DEBUG UI
+
+    void HandleLog(string logString, string stackTrace, LogType type)
+    {
+        output = logString;
+        stack = stackTrace;
+        debugText.GetComponent<TextMesh>().text += "\n" + output;
+    }
+
+    public void ClearDebug()
+    {
+        debugText.GetComponent<TextMesh>().text = "Debug log cleared.";
+    }
+
+    #endregion
 }

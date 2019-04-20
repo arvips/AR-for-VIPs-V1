@@ -15,16 +15,14 @@ public class ObstacleAudio : MonoBehaviour
 
     private void Awake()
     {
-        _camera = Camera.main;
     }
 
     // Use this for initialization
     void Start()
     {
-        AudioClip obstacleClip = AudioClip.Create("V_RIOT_synth_one_shot_music_box_02_E",1, 1, 1, true);
-        audioSource = GetComponent<AudioSource>();
-        audioSource.clip = obstacleClip;
-        audioSource.Play();
+        _camera = Camera.main;
+        //AudioClip obstacleClip = AudioClip.Create("V_RIOT_synth_one_shot_music_box_02_E",1, 1, 1, true);    THIS WILL CRASH UNITY
+        audioSource = GetComponentInParent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -32,11 +30,11 @@ public class ObstacleAudio : MonoBehaviour
     {
         //TODO: find the realtive height with cam
         //TODO: distance
-
+        
         double dist = Vector3.Distance(transform.position, _camera.gameObject.transform.position);
         float newPitch = 0f;
         float heightDifference = transform.position.y - _camera.transform.position.y;
-        //Debug.Log("Height difference for " + beacon.name + ": " + heightDifference);
+        //Debug.Log("Height difference for " + this.name + ": " + heightDifference);
 
         if (heightDifference >= cameraBoxSize * 0.25)
         {
@@ -56,6 +54,7 @@ public class ObstacleAudio : MonoBehaviour
             // Debug.Log(beacon.name + " New pitch: " + newPitch);
         }
 
+        audioSource.pitch = newPitch;
 
     }
 
