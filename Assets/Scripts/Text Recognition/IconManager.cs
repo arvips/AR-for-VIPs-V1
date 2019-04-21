@@ -15,6 +15,9 @@ public class IconManager: MonoBehaviour {
     [Tooltip("Select the icon to show.")]
     public GameObject Icon;
 
+    [Tooltip("Select a parent object for the icons.")]
+    public GameObject textBeaconManager;
+
     // Currently selected icon
     public GameObject SelectedIcon { get; set; }
 
@@ -57,7 +60,7 @@ public class IconManager: MonoBehaviour {
     /// </summary>
     public void CreateIcons(string respJson)
     {
-        Debug.Log("CreatIcons");
+        Debug.Log("IM: Create Icons");
         // Indicators and counts
         NewTextDetected = false;
         numIconsDetectedInOneCall = 0;
@@ -85,7 +88,7 @@ public class IconManager: MonoBehaviour {
         Matrix4x4 cameraToWorldMatrix = GetComponent<CameraManager>().managerCameraToWorldMatrix;
 
         raycastCamera = GetComponent<CameraManager>().PositionCamera(cameraToWorldMatrix);                      // Position camera to where you took a picture
-        Debug.Log("raycastCamera");
+        Debug.Log("IM: RaycastCamera");
         // Vectors to pinpoint location of text
         Vector3 lastRaycastPoint = Vector3.zero;
         Ray lastRay = new Ray();
@@ -100,7 +103,7 @@ public class IconManager: MonoBehaviour {
         Vector3 combinedBottomLeft = new Vector3(float.MaxValue, float.MinValue);
 
         String runningText = "";                                                                                // Text string that should be in one icon (multiple text results can be in one icon so keep a running tab)
-        Debug.Log("pre foreach");
+        Debug.Log("IM: Pre foreach");
         foreach (JSONNode text in texts)
         {
             JSONNode vertices = text["boundingPoly"]["vertices"];
@@ -152,7 +155,7 @@ public class IconManager: MonoBehaviour {
 
                 if (runningText.Length > 1)                                                                     // Make sure you have text to put into the icon
                 {
-                    Debug.Log("shoot raycast");
+                    Debug.Log("IM: Shoot raycast");
                     if (Physics.Raycast(lastRay, out centerHit, 15.0f, RaycastLayer))                           // First try and hit the spatial mapping with the ray
                     {
                         PlaceIcons(centerHit, runningText, currTopLeft, currTopRight, currBottomRight, currBottomLeft, combinedTopLeft, combinedTopRight, combinedBottomRight, combinedBottomLeft);
@@ -297,13 +300,15 @@ public class IconManager: MonoBehaviour {
         }
 
         // Put icon into the scene
-        GameObject icon = Instantiate(Icon);
+        GameObject icon = Instantiate(Icon, textBeaconManager.transform);
         icon.transform.position = centerHit.point;
+        icon.GetComponent<TextInstanceScript>().beaconText = runningText; //insert text here
+
         //icon.GetComponent<IconAction>().Text = runningText;
         icon.transform.rotation = Quaternion.LookRotation(-centerHit.normal);
 
         // Change icon size
-        ChangeCircleIconScale(icon, combinedTopLeft, combinedTopRight, combinedBottomLeft); 
+        //ChangeCircleIconScale(icon, combinedTopLeft, combinedTopRight, combinedBottomLeft); 
 
         // Change icon color based on coordinates
         //icon.GetComponent<Interactible>().OriginalMaterial = GetMaterial(topLeft.y, topRight.y, bottomRight.y, bottomLeft.y, icon);

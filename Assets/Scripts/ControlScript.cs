@@ -48,7 +48,7 @@ public class ControlScript : MonoBehaviour {
     private int tapCount = 1;
 
     private string output = ""; //helps print text in UI
-    private string stack = "";
+
 
     void Start () {
 
@@ -95,20 +95,19 @@ public class ControlScript : MonoBehaviour {
     #region **GESTURE CONTROLS**
     public void Tap(TappedEventArgs args) //(InteractionSourceKind source, int tapCount, Ray headRay) //(InteractionSource source, InteractionSourcePose sourcePose, Pose headPose, int tapCount) 
     {
-        //On Tap, turn obstacles on or off.
-        if (tapCount == 1)
+        //On Tap, toggle obstacles on or off.
+        //Debug.Log("Obstacle mode: " + GetComponentInParent<ObstacleBeaconScript>().obstacleMode);
+        if (!GetComponentInParent<ObstacleBeaconScript>().obstacleMode)
         {
-            ObstaclesOn();
-            tapCount++;
+            GetComponentInParent<ObstacleBeaconScript>().ObstaclesOn();
         }
 
-        else if (tapCount == 2)
+        else 
         {
-            ObstaclesOff();
-            tapCount = 1;
+            GetComponentInParent<ObstacleBeaconScript>().ObstaclesOff();
         }
 
-        Debug.Log("Tap event registered");
+        //Debug.Log("Tap event registered");
     }
 
     public void HoldCompleted(HoldCompletedEventArgs args)
@@ -135,7 +134,7 @@ public class ControlScript : MonoBehaviour {
     {
         //Activates obstacles mode. While active, beacons are replaced when necessary to ensure user's surroundings are covered.
 
-        Debug.Log("Obstacle beacons turned on.");
+        //Debug.Log("Obstacle beacons turned on.");
         testCube.GetComponent<Renderer>().material.color = Color.red;
         GetComponentInParent<ObstacleBeaconScript>().ObstaclesOn();
 
@@ -144,7 +143,7 @@ public class ControlScript : MonoBehaviour {
     public void ObstaclesOff()
     {
         //Deactivates obstacles mode.
-        Debug.Log("Obstacle beacons turned off.");
+        //Debug.Log("Obstacle beacons turned off.");
         testCube.GetComponent<Renderer>().material.color = Color.gray;
         GetComponentInParent<ObstacleBeaconScript>().ObstaclesOff();
     }
@@ -160,12 +159,42 @@ public class ControlScript : MonoBehaviour {
 
     }
 
-    public void ReadText ()
+    public void ReadText()
     {
         Debug.Log("Read Text command activated");
         testCube.GetComponent<Renderer>().material.color = Color.green;
 
+        //Note current audio source of Text Manager
+        //AudioSource defaultAudioSource = TextManager.GetComponent<TextToSpeechManager>().ttsmAudioSource;
+        AudioSource defaultAudioSource = TextManager.GetComponent<TextToSpeechGoogle>().audioSourceFinal;
 
+        if (textBeaconManager.transform.childCount > 0)
+        {
+            foreach (Transform beacon in textBeaconManager.transform)
+            {
+                //For each beacon, change the audio source to the beacon's audio source and have it read out the beacon's text.
+                string beaconText = beacon.gameObject.GetComponent<TextInstanceScript>().beaconText;
+                Debug.Log("CS: Text is: " + beaconText);
+                //TextManager.GetComponent<TextToSpeechManager>().ttsmAudioSource = beacon.gameObject.GetComponent<AudioSource>();
+                //TextManager.GetComponent<TextToSpeechManager>().SpeakText("Text: " + beaconText);
+                TextManager.GetComponent<TextToSpeechGoogle>().audioSourceFinal = beacon.gameObject.GetComponent<AudioSource>();
+                StartCoroutine(TextManager.GetComponent<TextToSpeechGoogle>().playTextGoogle("Text: " + beaconText));
+            }
+        }
+
+        else
+        {
+            //No child text beacons found
+            Debug.Log("No text beacons found.");
+            //TextManager.GetComponent<TextToSpeechManager>().SpeakText("No text found. Try the command, 'locate text.'");
+            StartCoroutine(TextManager.GetComponent<TextToSpeechGoogle>().playTextGoogle("No text found. Try the command, 'locate text.'"));
+
+
+        }
+
+        //When done, return audio source to default.
+        //TextManager.GetComponent<TextToSpeechManager>().ttsmAudioSource = defaultAudioSource;
+        TextManager.GetComponent<TextToSpeechGoogle>().audioSourceFinal = defaultAudioSource;
     }
 
     #endregion
@@ -176,9 +205,9 @@ public class ControlScript : MonoBehaviour {
 
     public void ClearObstacleBeacons ()
     {
-        //Destroys all obstacle beacons.
+        //Destroys all obstacle beacons and turns off obstacle mode.
         GetComponentInParent<ObstacleBeaconScript>().DeleteBeacons();
-
+        GetComponentInParent<ObstacleBeaconScript>().ObstaclesOff();
     }
 
     public void ClearTextBeacons ()
@@ -258,7 +287,6 @@ public class ControlScript : MonoBehaviour {
     void HandleLog(string logString, string stackTrace, LogType type)
     {
         output = logString;
-        stack = stackTrace;
         debugText.GetComponent<TextMesh>().text += "\n" + output;
     }
 

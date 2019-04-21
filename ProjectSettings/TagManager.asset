@@ -10,6 +10,7 @@ TagManager:
   - Unknown
   - Table
   - CameraManager
+  - Text Beacon
   layers:
   - Default
   - TransparentFX

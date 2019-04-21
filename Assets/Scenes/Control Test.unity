@@ -327,7 +327,6 @@ GameObject:
   - component: {fileID: 710888729}
   - component: {fileID: 710888732}
   - component: {fileID: 710888728}
-  - component: {fileID: 710888730}
   - component: {fileID: 710888731}
   m_Layer: 0
   m_Name: ScriptManager
@@ -437,7 +436,7 @@ MonoBehaviour:
     Response:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 710888730}
+        - m_Target: {fileID: 710888731}
           m_MethodName: SingleShot
           m_Mode: 1
           m_Arguments:
@@ -603,6 +602,23 @@ MonoBehaviour:
           m_CallState: 2
       m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
+  - Keyword: obstacles
+    Response:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 710888732}
+          m_MethodName: ObstaclesOn
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
   IsGlobalListener: 1
   PersistentKeywords: 0
 --- !u!4 &710888729
@@ -618,17 +634,6 @@ Transform:
   m_Father: {fileID: 240992963}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &710888730
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 710888727}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d9df9f373c5d7614d882d2054bfc295f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &710888731
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -649,8 +654,9 @@ MonoBehaviour:
   wallBeacon: {fileID: 1925729269249452, guid: f531241af780dde40912fa919d026d50, type: 2}
   beaconManager: {fileID: 2097662777}
   depth: 10
-  maxBeacons: 200
-  deviation: 2
+  maxBeacons: 300
+  deviation: 0.5
+  obstacleMode: 0
 --- !u!114 &710888732
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -711,7 +717,7 @@ MonoBehaviour:
   PersistentKeywords: 0
   RecognizerStart: 0
   Keywords:
-  - Keyword: obstacles on
+  - Keyword: obstacles
     KeyCode: 111
   - Keyword: locate text
     KeyCode: 108
@@ -799,7 +805,7 @@ Prefab:
     - target: {fileID: 114206805714726068, guid: a4b9db0d4654953439c842581655df0d,
         type: 2}
       propertyPath: MinArea
-      value: 1
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 114174504419642454, guid: a4b9db0d4654953439c842581655df0d,
         type: 2}
@@ -846,6 +852,7 @@ GameObject:
   - component: {fileID: 1403042593}
   - component: {fileID: 1403042592}
   - component: {fileID: 1403042591}
+  - component: {fileID: 1403042596}
   m_Layer: 0
   m_Name: TextManager
   m_TagString: Untagged
@@ -878,7 +885,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   queueInterval: 0.25
-  audioSource: {fileID: 1808393319}
+  ttsmAudioSource: {fileID: 1808393319}
   voice: 0
   TextToSpeechOn: 1
 --- !u!114 &1403042592
@@ -925,6 +932,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 2147483648
   Icon: {fileID: 1925729269249452, guid: def80b761fcc7ba49843b5dfb51828ec, type: 2}
+  textBeaconManager: {fileID: 112487223}
 --- !u!114 &1403042595
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -955,8 +963,22 @@ MonoBehaviour:
     e33: 0
   oldHoloPos: {x: 0, y: 0, z: 0}
   oldHoloRot: {x: 0, y: 0, z: 0, w: 0}
-  newCameraPrefab: {fileID: 1277298527478702, guid: c75149f3a847d9449a95c3f4326e9c56,
+  newCameraPrefab: {fileID: 1277298527478702, guid: ff3ac7e2d0fff634090cfa99c271c2b6,
     type: 2}
+  cameraAudioSource: {fileID: 1808393319}
+  cameraSound: {fileID: 8300000, guid: d3347ab78d87dcf468a2994cd303d4e1, type: 3}
+--- !u!114 &1403042596
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1403042589}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed6b0f1a830470d4d9df81c2c941ef43, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audioSourceFinal: {fileID: 1808393319}
 --- !u!1001 &1473033577
 Prefab:
   m_ObjectHideFlags: 0
@@ -1053,6 +1075,16 @@ Prefab:
         type: 2}
       propertyPath: SimulatedUpdatePeriodInSeconds
       value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114000012698980792, guid: 2ed75ffdf9031c94e8bce4b3d17b9928,
+        type: 2}
+      propertyPath: TimeBetweenUpdates
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 114000012698980792, guid: 2ed75ffdf9031c94e8bce4b3d17b9928,
+        type: 2}
+      propertyPath: TrianglesPerCubicMeter
+      value: 500
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2ed75ffdf9031c94e8bce4b3d17b9928, type: 2}
@@ -1174,7 +1206,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 2
       time: 0
-      value: 0
+      value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -1186,7 +1218,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 2
       time: 0
-      value: 0
+      value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -1230,6 +1262,7 @@ GameObject:
   - component: {fileID: 1821024452}
   - component: {fileID: 1821024451}
   - component: {fileID: 1821024454}
+  - component: {fileID: 1821024455}
   m_Layer: 0
   m_Name: Test Cube
   m_TagString: Untagged
@@ -1244,8 +1277,8 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1821024449}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.5, y: 0, z: 6}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0, y: 1.5, z: 0}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_Children: []
   m_Father: {fileID: 491970335}
   m_RootOrder: 0
@@ -1316,6 +1349,86 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   beacon: {fileID: 0}
   beaconManager: {fileID: 0}
+--- !u!82 &1821024455
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1821024449}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
 --- !u!1 &1958269720
 GameObject:
   m_ObjectHideFlags: 0
@@ -1374,7 +1487,7 @@ MonoBehaviour:
   TargetVerticalOverlap: 1
   HorizontalRayCount: 3
   VerticalRayCount: 3
-  MinimumTagalongDistance: 1
+  MinimumTagalongDistance: 0.5
   MaintainFixedSize: 1
   DepthUpdateSpeed: 4
   DebugDrawLines: 0
@@ -1436,10 +1549,10 @@ TextMesh:
   m_OffsetZ: 0
   m_CharacterSize: 1
   m_LineSpacing: 1
-  m_Anchor: 4
+  m_Anchor: 7
   m_Alignment: 0
   m_TabSize: 4
-  m_FontSize: 48
+  m_FontSize: 40
   m_FontStyle: 0
   m_RichText: 1
   m_Font: {fileID: 12800000, guid: 86574c70442309b45be5a1c37a37a40b, type: 3}

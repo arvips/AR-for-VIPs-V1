@@ -17,6 +17,12 @@ public class CameraManager : MonoBehaviour
 
     public GameObject newCameraPrefab;
 
+    [Tooltip("What will play the camera sound when a picture is taken.")]
+    public AudioSource cameraAudioSource;
+
+    [Tooltip("What sound will play when a picture is taken.")]
+    public AudioClip cameraSound;
+
     // Indicators
     private Boolean detecting { get; set; }                                  // Indicator to prevent user from calling the API multiple times too quickly (e.g. double clicks on the clicker)
 
@@ -61,7 +67,7 @@ public class CameraManager : MonoBehaviour
     {
         oldHoloPos = new Vector3(0f, 0f, 0f);
         oldHoloRot = Quaternion.identity;
-        Debug.Log("photmode");
+        Debug.Log("CM: Beginning manual photo mode.");
         SettingsManager = gameObject.GetComponent<SettingsManager>();
 
         detecting = false;
@@ -98,13 +104,13 @@ public class CameraManager : MonoBehaviour
         }
 
         detecting = true;
-        Debug.Log("before async");
+        Debug.Log("CM: Before Async");
         GameObject newCam = GameObject.FindGameObjectWithTag("MainCamera");
-        Debug.Log(newCam);
+        Debug.Log("CM: New Cam: " + newCam);
         oldHoloPos = newCam.transform.position;
-        Debug.Log(oldHoloPos);
+        Debug.Log("CM: Old Holo position: " + oldHoloPos);
         oldHoloRot = newCam.transform.rotation;
-        Debug.Log(oldHoloRot);
+        Debug.Log("CM: Old Holo rotation: " + oldHoloRot);
         //StartCoroutine(GetComponent<TextReco>().GoogleRequest());
         PhotoCapture.CreateAsync(false, OnPhotoCaptureCreated);
     }
@@ -114,7 +120,7 @@ public class CameraManager : MonoBehaviour
     /// </summary>
     void OnPhotoCaptureCreated(PhotoCapture captureObject)
     {
-        Debug.Log("photocapture");
+        Debug.Log("CM: OPCC: Photo capture");
         photoCaptureObject = captureObject;
         
         // Set camera properties
@@ -164,7 +170,10 @@ public class CameraManager : MonoBehaviour
         managerCameraToWorldMatrix = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>().cameraToWorldMatrix;
         Debug.Log("CM: managerCameraToWorldMatrix set.");
         photoCaptureObject.TakePhotoAsync(OnCapturedPhotoToMemory);
-        Debug.Log("CM: photoCaptureObject TakePhoto Async activated.");
+        //insert sound effect
+        cameraAudioSource.clip = cameraSound;
+        cameraAudioSource.Play();
+        Debug.Log("CM: Sound effect played. TakePhoto Async activated.");
     }
     
     public Matrix4x4 getManagerCamera()
@@ -199,6 +208,7 @@ public class CameraManager : MonoBehaviour
     public void StopPhotoMode()
     {
         photoCaptureObject.StopPhotoModeAsync(OnStoppedPhotoMode);
+        Debug.Log("CM: Photo mode stopped.");
     }
 
     /// <summary>

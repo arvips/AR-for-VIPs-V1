@@ -23,9 +23,10 @@ GameObject:
   - component: {fileID: 135705564281638014}
   - component: {fileID: 23846067379987284}
   - component: {fileID: 82268330346721870}
+  - component: {fileID: 114680351830214726}
   m_Layer: 0
   m_Name: TextBeacon
-  m_TagString: Untagged
+  m_TagString: Text Beacon
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -164,6 +165,18 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 0
+--- !u!114 &114680351830214726
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1925729269249452}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5093090af2089f040970a78a8c330579, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  beaconText: 
 --- !u!135 &135705564281638014
 SphereCollider:
   m_ObjectHideFlags: 1

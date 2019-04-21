@@ -8,8 +8,8 @@ public class ObstacleAudio : MonoBehaviour
     public float maxPulseFrequency = 8f;
     public AudioSource audioSource;
     public float cameraBoxSize = 2f;
-    public float maxPitch = 2.0f;
-    public float minPitch = 1.0f;
+    public float maxPitch = 1.0f;
+    public float minPitch = 0.5f;
 
     private Camera _camera;
 

@@ -55,7 +55,7 @@ public enum TextToSpeechVoice
         // Inspector Variables
         [Tooltip("The audio source where speech will be played.")]
         [SerializeField]
-        private AudioSource audioSource;
+        public AudioSource ttsmAudioSource;
 
         [Tooltip("The voice that will be used to generate speech.")]
         [SerializeField]
@@ -68,11 +68,11 @@ public enum TextToSpeechVoice
         {
             get
             {
-                return (this.audioSource);
+                return (this.ttsmAudioSource);
             }
             set
             {
-                this.audioSource = value;
+                this.ttsmAudioSource = value;
             }
         }
         public TextToSpeechVoice Voice
@@ -140,7 +140,7 @@ public enum TextToSpeechVoice
 
             try
             {
-                if (audioSource == null)
+                if (ttsmAudioSource == null)
                 {
                     Debug.LogError("An AudioSource is required and should be assigned to 'Audio Source' in the inspector.");
                 }
@@ -192,10 +192,10 @@ public enum TextToSpeechVoice
                       "Speech", unityData, sampleCount, frequency);
  
                     // Set the source on the audio clip
-                    audioSource.clip = clip;
+                    ttsmAudioSource.clip = clip;
  
                     // Play audio
-                    audioSource.Play();
+                    ttsmAudioSource.Play();
                 },
                 false);
             });
@@ -211,7 +211,7 @@ public enum TextToSpeechVoice
             get
             {
     #if WINDOWS_UWP
-            return (this.audioSource.isPlaying);
+            return (this.ttsmAudioSource.isPlaying);
     #else
                 return (false);
     #endif
@@ -242,9 +242,11 @@ public enum TextToSpeechVoice
           TextToSpeechVoice voice,
           Func<string, IAsyncOperation<SpeechSynthesisStream>> speakFunc)
         {
-          // Make sure there's something to speak
+        Debug.Log("TTSM: Speech started.");      
+        // Make sure there's something to speak
           if (speakFunc == null)
           {
+    Debug.Log("TTSM: SpeakFunc Null");      
             throw new ArgumentNullException(nameof(speakFunc));
           }
  
@@ -294,12 +296,14 @@ public enum TextToSpeechVoice
 
     public void EnterSpeechMode()
     {
+        Debug.Log("TTSM: Speech mode entered.");
         TextToSpeechOn = true;
         this.SpeakText("Entered Speech Mode");
     }
 
     public void ExitSpeechMode()
     {
+        Debug.Log("TTSM: Speech mode exited.");
         TextToSpeechOn = false;
         this.SpeakText("Exited Speech Mode");
     }

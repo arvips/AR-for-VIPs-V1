@@ -42,7 +42,7 @@ public class ObstacleBeaconScript : MonoBehaviour {
     private Vector3 startPos;
     private float currentDistance;
     private float time = 0;
-    private bool obstacleMode = false;
+    public bool obstacleMode = false;
 
 
     // Use this for initialization
@@ -89,6 +89,7 @@ public class ObstacleBeaconScript : MonoBehaviour {
 
     public void ObstaclesOn ()
     {
+        Debug.Log("Obstacle mode on.");
         if (!obstacleMode)
         {
             //Toggle on obstacle mode
@@ -110,6 +111,7 @@ public class ObstacleBeaconScript : MonoBehaviour {
     public void ObstaclesOff ()
     {
         //Toggle off obstacle mode
+        Debug.Log("Obstacle beacons cleared. Obstacle mode off.");
         obstacleMode = false;
         DeleteBeacons();
         if (!distanceRefresh)
