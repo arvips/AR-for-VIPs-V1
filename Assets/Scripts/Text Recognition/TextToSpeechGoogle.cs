@@ -13,6 +13,7 @@ public class TextToSpeechGoogle : MonoBehaviour
 {
 
     public AudioSource audioSourceFinal;
+    public double speakingRate = 1;
 
     struct ClipData
     {
@@ -49,7 +50,7 @@ public class TextToSpeechGoogle : MonoBehaviour
             { "Content-Type", "application/json" }
         };
 
-        string json = "{ \"input\": {\"text\":\" " + mainText + "\"},\"voice\": {\"languageCode\":\"en-US\"}, \"audioConfig\": {\"audioEncoding\":\"LINEAR16\"}}";
+        string json = "{ \"input\": {\"text\":\" " + mainText + "\"},\"voice\": {\"languageCode\":\"en-US\"}, \"audioConfig\": {\"audioEncoding\":\"LINEAR16\",\"speakingRate\":" + speakingRate + "}}";
 
         var data = Encoding.UTF8.GetBytes(json);
         WWW www = new WWW(url, data, header);
@@ -71,5 +72,15 @@ public class TextToSpeechGoogle : MonoBehaviour
 
 
 
+    }
+
+    public void increaseSpeechRate()
+    {
+        speakingRate += .25;
+    }
+
+    public void decreaseSpeechRate()
+    {
+        speakingRate -= .25;
     }
 }

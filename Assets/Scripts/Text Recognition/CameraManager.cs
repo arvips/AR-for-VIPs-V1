@@ -227,7 +227,6 @@ public class CameraManager : MonoBehaviour
     {
         Vector3 position = cameraToWorldMatrix.MultiplyPoint(Vector3.zero);
         Quaternion rotation = Quaternion.LookRotation(-cameraToWorldMatrix.GetColumn(2), cameraToWorldMatrix.GetColumn(1));
-        //Camera raycastCamera = this.gameObject.GetComponentInChildren<Camera>();
         Camera newCamera = Instantiate(newCameraPrefab).GetComponent<Camera>() ;
         newCamera.transform.position = oldHoloPos;
         newCamera.transform.rotation = oldHoloRot;

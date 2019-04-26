@@ -50,6 +50,7 @@ public class TextReco : MonoBehaviour {
         {
             string respJson = www.text;
             Debug.Log("TR response JSON received.");
+            //Debug.Log(respJson);
 
             // Indicate when no text is detected
             if (respJson.Contains("textAnnotations") && !respJson.Contains("error"))

@@ -619,6 +619,108 @@ MonoBehaviour:
           m_CallState: 2
       m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
+  - Keyword: increase speed
+    Response:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 710888732}
+          m_MethodName: increaseSpeed
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - Keyword: decrease speed
+    Response:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 710888732}
+          m_MethodName: decreaseSpeed
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - Keyword: spotlight on
+    Response:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 710888731}
+          m_MethodName: SpotlightOn
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - Keyword: spotlight off
+    Response:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 710888731}
+          m_MethodName: SpotlightOff
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - Keyword: proximity mode on
+    Response:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 710888731}
+          m_MethodName: ProximityModeOn
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - Keyword: proximity mode off
+    Response:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 710888731}
+          m_MethodName: ProximityModeOff
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
   IsGlobalListener: 1
   PersistentKeywords: 0
 --- !u!4 &710888729
@@ -646,16 +748,30 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   obstacleBeaconManager: {fileID: 2097662777}
+  spotlightMode: 1
+  proximityMode: 1
+  coneCastAngle: 18
+  spotlightSize: 0.5
   distanceRefresh: 1
-  obstacleRefreshDistance: 2
+  obstacleRefreshDistance: 1.5
   obstacleRefreshTime: 8
+  obstacleBeaconLog: {fileID: 1925729269249452, guid: afafa87d193f47e40ad5e4d0f61738a3,
+    type: 2}
+  obstacleBeaconLin: {fileID: 1925729269249452, guid: e17065c08a6ddad4fa3c9c93ca3a0442,
+    type: 2}
+  obstacleMaterial: {fileID: 2100000, guid: 64165286eff98134b82f4a6081c52d0f, type: 2}
+  wallBeaconLog: {fileID: 1925729269249452, guid: f531241af780dde40912fa919d026d50,
+    type: 2}
+  wallBeaconLin: {fileID: 1925729269249452, guid: 83581581759872f4394be8ae8c7175d6,
+    type: 2}
+  wallMaterial: {fileID: 2100000, guid: 72e18e0d02c99274e9e3b31c87729790, type: 2}
+  beaconManager: {fileID: 2097662777}
+  depth: 10
+  maxBeacons: 600
+  deviation: 2
   obstacleBeacon: {fileID: 1925729269249452, guid: afafa87d193f47e40ad5e4d0f61738a3,
     type: 2}
   wallBeacon: {fileID: 1925729269249452, guid: f531241af780dde40912fa919d026d50, type: 2}
-  beaconManager: {fileID: 2097662777}
-  depth: 10
-  maxBeacons: 300
-  deviation: 0.5
   obstacleMode: 0
 --- !u!114 &710888732
 MonoBehaviour:
@@ -757,6 +873,18 @@ MonoBehaviour:
     KeyCode: 44
   - Keyword: obstacles off
     KeyCode: 112
+  - Keyword: increase speed
+    KeyCode: 43
+  - Keyword: decrease speed
+    KeyCode: 61
+  - Keyword: spotlight on
+    KeyCode: 61
+  - Keyword: spotlight off
+    KeyCode: 61
+  - Keyword: proximity mode on
+    KeyCode: 61
+  - Keyword: proximity mode off
+    KeyCode: 61
   recognitionConfidenceLevel: 1
 --- !u!1001 &1239819179
 Prefab:
@@ -933,6 +1061,7 @@ MonoBehaviour:
     m_Bits: 2147483648
   Icon: {fileID: 1925729269249452, guid: def80b761fcc7ba49843b5dfb51828ec, type: 2}
   textBeaconManager: {fileID: 112487223}
+  defaultTextDistance: 0
 --- !u!114 &1403042595
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -979,6 +1108,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   audioSourceFinal: {fileID: 1808393319}
+  speakingRate: 1
 --- !u!1001 &1473033577
 Prefab:
   m_ObjectHideFlags: 0
@@ -1444,7 +1574,7 @@ GameObject:
   - component: {fileID: 1958269724}
   - component: {fileID: 1958269723}
   - component: {fileID: 1958269722}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Debug Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}

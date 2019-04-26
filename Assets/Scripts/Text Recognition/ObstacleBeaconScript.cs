@@ -10,6 +10,18 @@ public class ObstacleBeaconScript : MonoBehaviour {
     [Tooltip("Parent object of spawned obstacle beacons.")]
     public GameObject obstacleBeaconManager;
 
+    [Tooltip("Choose whether all obstacle beacons produce sound or only those the user is looking at.")]
+    public bool spotlightMode = true;
+
+    [Tooltip("Choose whether obstacle beacon sound fall off logarthmically (proximity mode on) or linearly (proximity mode off).")]
+    public bool proximityMode = true;
+
+    [Tooltip("Choose the angle for ConeCasting")]
+    public float coneCastAngle;
+
+    [Tooltip("Size of the spotlight. All beacons within a spherecast of this size directed out from the user's vision will sonify.")]
+    public float spotlightSize = 1;
+
     [Tooltip("Choose whether to refresh obstacle beacons based on distance (true) or time (false).")]
     public bool distanceRefresh = true;
 
@@ -20,11 +32,23 @@ public class ObstacleBeaconScript : MonoBehaviour {
     [Tooltip("Time in seconds between beacon refresh when obstacle mode is on and refresh mode is set to time.")]
     public float obstacleRefreshTime = 8;
 
-    [Tooltip("Obstacle beacon prefab to use.")]
-    public GameObject obstacleBeacon;
+    [Tooltip("Logarithmic falloff obstacle beacon prefab to use.")]
+    public GameObject obstacleBeaconLog;
 
-    [Tooltip("Wall beacon prefab to use.")]
-    public GameObject wallBeacon;
+    [Tooltip("Linear falloff obstacle beacon prefab to use.")]
+    public GameObject obstacleBeaconLin;
+
+    [Tooltip("Color of obstacle beacons.")]
+    public Material obstacleMaterial;
+
+    [Tooltip("Logarithmic falloff wall beacon prefab to use.")]
+    public GameObject wallBeaconLog;
+
+    [Tooltip("Linear falloff wall beacon prefab to use.")]
+    public GameObject wallBeaconLin;
+
+    [Tooltip("Color of wall beacons.")]
+    public Material wallMaterial;
 
     [Tooltip("This object will be the parent for all spawned obstaclce and wall beacons.")]
     public GameObject beaconManager;
@@ -38,11 +62,18 @@ public class ObstacleBeaconScript : MonoBehaviour {
     [Tooltip("Amount to deviate from center of gaze when spherecasting; smaller results in tighter spray.")]
     public float deviation = 0.2f;
 
+    [HideInInspector]
+    public GameObject obstacleBeacon;
+
+    [HideInInspector]
+    public GameObject wallBeacon;
 
     private Vector3 startPos;
     private float currentDistance;
     private float time = 0;
     public bool obstacleMode = false;
+
+    private Physics physics;
 
 
     // Use this for initialization
@@ -53,7 +84,7 @@ public class ObstacleBeaconScript : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
     {
-        //Debug.Log("Time: " + time);
+        //If obstacle mode is on, calculate either distance or time and refresh beacons appropriately.
         if (obstacleMode)
         {
             if (distanceRefresh)
@@ -81,11 +112,63 @@ public class ObstacleBeaconScript : MonoBehaviour {
                     Debug.Log("Obstacle refresh time reached. New beacons placed.");
                 }
             }
+        }
 
+        //If spotlight mode is on, mute all obstacle beacons other than the ones the user is looking at.
+        if (spotlightMode)
+        {
+            //Mutes and grays all beacons
+            MuteAllObstacleBeacons();
+
+
+            //Spherecast out from user
+
+            //Capture camera's location and orientation
+            var headPosition = Camera.main.transform.position;
+            var gazeDirection = Camera.main.transform.forward;
+
+            //Instantiate variable to hold hit info
+            //RaycastHit[] spotlightHits = Physics.SphereCastAll(headPosition, spotlightSize, gazeDirection, depth);
+            RaycastHit[] spotlightHits = physics.ConeCastAll(headPosition, spotlightSize, gazeDirection, depth, coneCastAngle);
+
+            foreach (RaycastHit hit in spotlightHits)
+            {
+                if (hit.transform != null)
+                {
+                    if (hit.transform.gameObject.tag == "Obstacle Beacon" || hit.transform.gameObject.tag == "Wall Beacon")
+                    {
+                        hit.transform.gameObject.GetComponent<AudioSource>().volume = 1;
+                        //Also restore beacons' color (red for obstacle, orange for wall)
+                        if (hit.transform.gameObject.tag == "Obstacle Beacon")
+                        {
+                            hit.transform.gameObject.GetComponent<Renderer>().material = obstacleMaterial;
+                        }
+
+                        else //presuming wall beacon
+                        {
+                            hit.transform.gameObject.GetComponent<Renderer>().material = wallMaterial;
+                        }
+                    }
+                }
+            }
 
         }
 
+        //Set logarithmic or linear falloff beacon type.
+        if (proximityMode)
+        {
+            obstacleBeacon = obstacleBeaconLog;
+            wallBeacon = wallBeaconLog;
+        }
+
+        else
+        {
+            obstacleBeacon = obstacleBeaconLin;
+            wallBeacon = wallBeaconLin;
+        }
     }
+
+    #region OBSTACLE MODE
 
     public void ObstaclesOn ()
     {
@@ -120,6 +203,52 @@ public class ObstacleBeaconScript : MonoBehaviour {
         }
     }
 
+    #endregion
+
+    #region SPOTLIGHT MODE
+
+    public void SpotlightOn()
+    {
+        Debug.Log("Spotlight mode on.");
+        spotlightMode = true;
+        MuteAllObstacleBeacons();
+    }
+
+    public void SpotlightOff()
+    {
+        Debug.Log("Spotlight mode off.");
+        spotlightMode = false;
+        UnmuteAllObstacleBeacons();
+    }
+
+    #endregion
+
+    #region PROXIMITY MODE
+
+    public void ProximityModeOn()
+    {
+        Debug.Log("Proximity mode on. Beacons refreshed.");
+        proximityMode = true;
+        obstacleBeacon = obstacleBeaconLog;
+        wallBeacon = wallBeaconLog;
+        DeleteBeacons();
+        ConeShot();
+    }
+
+    public void ProximityModeOff()
+    {
+        Debug.Log("Proximity mode off. Beacons refreshed.");
+        proximityMode = true;
+        obstacleBeacon = obstacleBeaconLin;
+        wallBeacon = wallBeaconLin;
+        DeleteBeacons();
+        ConeShot();
+    }
+
+    #endregion
+
+    #region BEACON SHOOTING
+
     public void SingleShot()
     {
         // Do a single raycast straight out from the camera.
@@ -142,6 +271,11 @@ public class ObstacleBeaconScript : MonoBehaviour {
                 //If a wall is hit, instantiate a wall beacon
                 Instantiate(wallBeacon, hit.point, Quaternion.identity, beaconManager.transform);
 
+            }
+
+            else if (hit.transform.gameObject.tag == "Obstacle Beacon" || hit.transform.gameObject.tag == "Wall Beacon")
+            {
+                Debug.Log("Hit preexisting beacon.");
             }
 
             else
@@ -190,10 +324,10 @@ public class ObstacleBeaconScript : MonoBehaviour {
 
             if (hit.transform != null)
             {
-                //Check whether hit item is a floor or ceiling; if not, instantiate beacon
-                if (hit.transform.gameObject.tag == "Floor" || hit.transform.gameObject.tag == "Ceiling")
+                //Check whether hit item is a floor, a ceiling, or another beacon; if not, instantiate beacon
+                if (hit.transform.gameObject.tag == "Floor" || hit.transform.gameObject.tag == "Ceiling" || hit.transform.gameObject.tag == "Obstacle Beacon" || hit.transform.gameObject.tag == "Wall Beacon")
                 {
-                    //Debug.Log("Hit floor or ceiling");
+                    //Do nothing
                 }
 
                 else if (hit.transform.gameObject.tag == "Wall")
@@ -216,6 +350,10 @@ public class ObstacleBeaconScript : MonoBehaviour {
 
     }
 
+    #endregion
+
+    #region BEACON MANAGEMENT
+
     public void DeleteBeacons()
     {
         foreach (Transform beacon in beaconManager.transform)
@@ -223,5 +361,35 @@ public class ObstacleBeaconScript : MonoBehaviour {
             GameObject.Destroy(beacon.gameObject);
         }
     }
+
+    public void MuteAllObstacleBeacons ()
+    {
+        foreach (Transform beacon in beaconManager.transform)
+        {
+            beacon.gameObject.GetComponent<AudioSource>().volume = 0;
+            beacon.gameObject.GetComponent<Renderer>().material.color = Color.gray;
+            //Also turn the beacons gray
+        }
+    }
+
+    public void UnmuteAllObstacleBeacons()
+    {
+        foreach (Transform beacon in beaconManager.transform)
+        {
+            beacon.gameObject.GetComponent<AudioSource>().volume = 1;
+            //Also restore beacons' color (red for obstacle, orange for wall)
+            if (beacon.gameObject.tag == "Obstacle Beacon")
+            {
+                beacon.gameObject.GetComponent<Renderer>().material = obstacleMaterial;
+            }
+
+            else //presuming wall beacon
+            {
+                beacon.gameObject.GetComponent<Renderer>().material = wallMaterial;
+            }
+
+        }
+    }
+    #endregion
 
 }

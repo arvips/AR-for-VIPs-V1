@@ -25,6 +25,9 @@ public class IconManager: MonoBehaviour {
     private Dictionary<int, List<GameObject>> iconDictionary;
     public int NumIcons { get; set; }
 
+    //Default distance if no text detected
+    public int defaultTextDistance;
+
     // Thresholds and Constants
     private const float DefaultIconThickness = 0.015f;
     private const float DefaultIconWidth = 0.08f;
@@ -53,6 +56,7 @@ public class IconManager: MonoBehaviour {
         SettingsManager = gameObject.GetComponent<SettingsManager>();
         iconDictionary = new Dictionary<int, List<GameObject>>();           // Create new dictionary for icons
         NumIcons = 0;
+        defaultTextDistance = 5;
     }
 
     /// <summary>
@@ -85,10 +89,13 @@ public class IconManager: MonoBehaviour {
         // Camera properties
         ScaleX = (float)Screen.width / (float)CameraManager.cameraResolution.width;
         ScaleY = (float)Screen.height / (float)CameraManager.cameraResolution.height;
+        Debug.Log("IM: Screen width: " + (float)Screen.width);
+        Debug.Log("IM: Camera resolution width: " + (float)CameraManager.cameraResolution.width);
+        Debug.Log("IM: ScaleX: " + ScaleX);
         Matrix4x4 cameraToWorldMatrix = GetComponent<CameraManager>().managerCameraToWorldMatrix;
 
         raycastCamera = GetComponent<CameraManager>().PositionCamera(cameraToWorldMatrix);                      // Position camera to where you took a picture
-        Debug.Log("IM: RaycastCamera");
+        //Debug.Log("IM: RaycastCamera");
         // Vectors to pinpoint location of text
         Vector3 lastRaycastPoint = Vector3.zero;
         Ray lastRay = new Ray();
@@ -103,7 +110,7 @@ public class IconManager: MonoBehaviour {
         Vector3 combinedBottomLeft = new Vector3(float.MaxValue, float.MinValue);
 
         String runningText = "";                                                                                // Text string that should be in one icon (multiple text results can be in one icon so keep a running tab)
-        Debug.Log("IM: Pre foreach");
+        Debug.Log("IM: number of text responses-" + texts.Count);
         foreach (JSONNode text in texts)
         {
             JSONNode vertices = text["boundingPoly"]["vertices"];
@@ -112,6 +119,8 @@ public class IconManager: MonoBehaviour {
             Vector3 currTopRight = CalcTopRightVector(vertices);
             Vector3 currBottomRight = CalcBottomRightVector(vertices);
             Vector3 currBottomLeft = CalcBottomLeftVector(vertices);
+
+            //PLACEHOLDER: Try manually substituting scale factors of 2+? Currently at 0.99 (screen resolution 1268, camera resolution 1280, scale factor = 0.99
 
             // Google Vision API returns coordinates with the top-left being the origin. Unity uses bottom-left as the origin so you must flip the Y.
             Vector3 topLeftScaledAndFlipped = ScaleVector(FlipY(currTopLeft));
@@ -162,6 +171,10 @@ public class IconManager: MonoBehaviour {
                     } else if (Physics.Raycast(lastRay, out centerHit, 15.0f, LayerMask.GetMask("Plane")))      // Try to hit the plane if there is no spatial mapping with the ray
                     {
                         PlaceIcons(centerHit, runningText, currTopLeft, currTopRight, currBottomRight, currBottomLeft, combinedTopLeft, combinedTopRight, combinedBottomRight, combinedBottomLeft);
+                    } else
+                    {
+                        Vector3 iconPos = lastRay.origin + lastRay.direction*defaultTextDistance;
+                        PlaceIconsManual(iconPos, runningText);
                     }
                 }
 
@@ -192,24 +205,10 @@ public class IconManager: MonoBehaviour {
         {
             PlaceIcons(hit, runningText, lastTopLeft, lastTopRight, lastBottomRight, lastBottomLeft, combinedTopLeft, combinedTopRight, combinedBottomRight, combinedBottomLeft);
         }
-
-        // Text-to-speech for new text
-        if (SettingsManager.OCRSetting == OCRRunSetting.Manual )
+        else
         {
-            if (NewTextDetected)
-            {
-                if (numIconsDetectedInOneCall == 1)
-                {
-                    GetComponent<TextToSpeechManager>().SpeakText(numIconsDetectedInOneCall + " region of text detected.");
-                } else
-                {
-                    GetComponent<TextToSpeechManager>().SpeakText(numIconsDetectedInOneCall + " regions of text detected.");
-                }
-            }
-            else
-            {
-                GetComponent<TextToSpeechManager>().SpeakText("No New Text Detected");
-            }
+            Vector3 iconPos = lastRay.origin + lastRay.direction * defaultTextDistance;
+            PlaceIconsManual(iconPos, runningText);
         }
 
         // Tell user if there are too many icons
@@ -223,12 +222,7 @@ public class IconManager: MonoBehaviour {
                 GetComponent<TextToSpeechManager>().SpeakText("There are too many icons. Please clear icons before finding new text.");
             }
         }
-
-        // Update indicators to say that the app is not detecting anymore. At this point, the user can detect text again
-        if (SettingsManager.OCRSetting == OCRRunSetting.Manual)
-        {
-            //GetComponent<CameraManager>().detecting = false;
-        }
+        
 
     }
 
@@ -277,8 +271,7 @@ public class IconManager: MonoBehaviour {
     /// </summary>
     Vector3 FlipY(Vector3 v)
     {
-        return new Vector3();
-        //return new Vector3(v.x, (float)CameraManager.cameraResolution.height - v.y, v.z);
+        return new Vector3(v.x, (float)CameraManager.cameraResolution.height - v.y, v.z);
     }
 
     /// <summary>
@@ -321,6 +314,40 @@ public class IconManager: MonoBehaviour {
         {
             iconList.Add(icon);
         } else
+        {
+            iconList = new List<GameObject>();
+            iconList.Add(icon);
+            iconDictionary.Add(key, iconList);
+        }
+
+        // Update counts and indicators
+        NumIcons++;
+        numIconsDetectedInOneCall++;
+        NewTextDetected = true;
+    }
+
+    public void PlaceIconsManual(Vector3 iconPos, String runningText)
+    {
+        Debug.Log("IM: manual Place Icons");
+        if (SameIconExists(iconPos, runningText))                   // Avoid duplicates
+        {
+            return;
+        }
+
+        // Put icon into the scene
+        GameObject icon = Instantiate(Icon, textBeaconManager.transform);
+        icon.transform.position = iconPos;
+        icon.GetComponent<TextInstanceScript>().beaconText = runningText; //insert text here
+
+        // Add icon to dictionary to prevent duplicates later on
+        int key = LevenshteinDistance.GetLevenshteinKey(runningText);
+        List<GameObject> iconList;
+
+        if (iconDictionary.TryGetValue(key, out iconList))
+        {
+            iconList.Add(icon);
+        }
+        else
         {
             iconList = new List<GameObject>();
             iconList.Add(icon);

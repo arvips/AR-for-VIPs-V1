@@ -11,6 +11,8 @@ TagManager:
   - Table
   - CameraManager
   - Text Beacon
+  - Obstacle Beacon
+  - Wall Beacon
   layers:
   - Default
   - TransparentFX

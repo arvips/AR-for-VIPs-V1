@@ -152,10 +152,7 @@ public class ControlScript : MonoBehaviour {
     {
         Debug.Log("Locate Text command activated");
         testCube.GetComponent<Renderer>().material.color = Color.blue;
-        //InputManager go = GetComponent<InputManager>();  //you probably need to actually specify the input manager using transforms
         TextManager.GetComponent<CameraManager>().BeginManualPhotoMode();
-        
-        //GetComponent<CameraManager>().BeginManualPhotoMode();
 
     }
 
@@ -172,13 +169,18 @@ public class ControlScript : MonoBehaviour {
         {
             foreach (Transform beacon in textBeaconManager.transform)
             {
-                //For each beacon, change the audio source to the beacon's audio source and have it read out the beacon's text.
-                string beaconText = beacon.gameObject.GetComponent<TextInstanceScript>().beaconText;
-                Debug.Log("CS: Text is: " + beaconText);
-                //TextManager.GetComponent<TextToSpeechManager>().ttsmAudioSource = beacon.gameObject.GetComponent<AudioSource>();
-                //TextManager.GetComponent<TextToSpeechManager>().SpeakText("Text: " + beaconText);
-                TextManager.GetComponent<TextToSpeechGoogle>().audioSourceFinal = beacon.gameObject.GetComponent<AudioSource>();
-                StartCoroutine(TextManager.GetComponent<TextToSpeechGoogle>().playTextGoogle("Text: " + beaconText));
+                GameObject newCam = GameObject.FindGameObjectWithTag("MainCamera");
+                if (Vector3.Distance(beacon.transform.position, newCam.transform.position) < 50)
+                {
+                    //For each beacon, change the audio source to the beacon's audio source and have it read out the beacon's text.
+                    string beaconText = beacon.gameObject.GetComponent<TextInstanceScript>().beaconText;
+                    Debug.Log("CS: Text is: " + beaconText);
+                    //TextManager.GetComponent<TextToSpeechManager>().ttsmAudioSource = beacon.gameObject.GetComponent<AudioSource>();
+                    //TextManager.GetComponent<TextToSpeechManager>().SpeakText("Text: " + beaconText);
+                    TextManager.GetComponent<TextToSpeechGoogle>().audioSourceFinal = beacon.gameObject.GetComponent<AudioSource>();
+                    TextManager.transform.position = beacon.transform.position;
+                    StartCoroutine(TextManager.GetComponent<TextToSpeechGoogle>().playTextGoogle("Text: " + beaconText));
+                }
             }
         }
 
@@ -195,6 +197,17 @@ public class ControlScript : MonoBehaviour {
         //When done, return audio source to default.
         //TextManager.GetComponent<TextToSpeechManager>().ttsmAudioSource = defaultAudioSource;
         TextManager.GetComponent<TextToSpeechGoogle>().audioSourceFinal = defaultAudioSource;
+        TextManager.transform.position = new Vector3(0, 0, 0);
+    }
+
+    public void increaseSpeed()
+    {
+        TextManager.GetComponent<TextToSpeechGoogle>().increaseSpeechRate();
+    }
+
+    public void decreaseSpeed()
+    {
+        TextManager.GetComponent<TextToSpeechGoogle>().decreaseSpeechRate();
     }
 
     #endregion
