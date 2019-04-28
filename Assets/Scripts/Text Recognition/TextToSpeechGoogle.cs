@@ -14,6 +14,8 @@ public class TextToSpeechGoogle : MonoBehaviour
 
     public AudioSource audioSourceFinal;
     public double speakingRate = 1;
+    [HideInInspector]
+    public float clipLength = 1;
 
     struct ClipData
     {
@@ -42,7 +44,7 @@ public class TextToSpeechGoogle : MonoBehaviour
     }
 
 
-    public IEnumerator playTextGoogle(String mainText)
+    public void playTextGoogle(String mainText)
     {
         //System.Net.ServicePointManager.ServerCertificateValidationCallback += (o, certificate, chain, errors) => true;
         //Debug.Log("Running");
@@ -55,8 +57,11 @@ public class TextToSpeechGoogle : MonoBehaviour
         var data = Encoding.UTF8.GetBytes(json);
         WWW www = new WWW(url, data, header);
 
-        yield return www;
-
+        //yield return www;
+        while (!www.isDone)
+        {
+            continue;
+        }
        
         string temp = (string)www.text;
         //Debug.Log(temp);
@@ -65,13 +70,16 @@ public class TextToSpeechGoogle : MonoBehaviour
         byte[] decodedBytes = Convert.FromBase64String(decodeThis);
         WAV wav = new WAV(decodedBytes);
         //Debug.Log(wav);
-        AudioClip audioClip = AudioClip.Create("testSound", wav.SampleCount, 1, wav.Frequency, false, false);
+        //AudioClip audioClip = AudioClip.Create("testSound", wav.SampleCount, 1, wav.Frequency, false, false);
+        AudioClip audioClip = AudioClip.Create("testSound", wav.SampleCount, 1, wav.Frequency, false);
         audioClip.SetData(wav.LeftChannel, 0);
         audioSourceFinal.clip = audioClip;
         audioSourceFinal.Play();
-
-
-
+        //Debug.Log("TTS: audio source playing last " + audioSourceFinal.isPlaying);
+        clipLength = audioClip.length;
+        Debug.Log("Clip length: " + clipLength);
+        //yield return new WaitForSeconds(audioClip.length);
+        //return null;
     }
 
     public void increaseSpeechRate()

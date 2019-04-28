@@ -22,7 +22,7 @@ public class IconManager: MonoBehaviour {
     public GameObject SelectedIcon { get; set; }
 
     // Dictionary of Icons
-    private Dictionary<int, List<GameObject>> iconDictionary;
+    public Dictionary<int, List<GameObject>> iconDictionary;
     public int NumIcons { get; set; }
 
     //Default distance if no text detected
@@ -296,6 +296,7 @@ public class IconManager: MonoBehaviour {
         GameObject icon = Instantiate(Icon, textBeaconManager.transform);
         icon.transform.position = centerHit.point;
         icon.GetComponent<TextInstanceScript>().beaconText = runningText; //insert text here
+        icon.name = "Text Beacon: " + runningText;
 
         //icon.GetComponent<IconAction>().Text = runningText;
         icon.transform.rotation = Quaternion.LookRotation(-centerHit.normal);
@@ -335,9 +336,11 @@ public class IconManager: MonoBehaviour {
         }
 
         // Put icon into the scene
-        GameObject icon = Instantiate(Icon, textBeaconManager.transform);
+        GameObject icon;
+        icon = Instantiate(Icon, textBeaconManager.transform) as GameObject;
         icon.transform.position = iconPos;
         icon.GetComponent<TextInstanceScript>().beaconText = runningText; //insert text here
+        icon.name = "Text Beacon: " + runningText;
 
         // Add icon to dictionary to prevent duplicates later on
         int key = LevenshteinDistance.GetLevenshteinKey(runningText);
@@ -360,6 +363,21 @@ public class IconManager: MonoBehaviour {
         NewTextDetected = true;
     }
 
+    public void ShootText (string sampleText)
+    {
+        // Do a single raycast straight out from the camera; place a text beacon where it hits.
+        var headPosition = Camera.main.transform.position;
+        var gazeDirection = Camera.main.transform.forward;
+
+        RaycastHit hit;
+
+        if (Physics.Raycast(headPosition, gazeDirection, out hit,
+            30.0f))
+        {
+            Debug.Log("Sample text beacon placed. Text: " + sampleText);
+            PlaceIconsManual(hit.point, sampleText);
+        }
+    }
     /// <summary>
     /// Returns true if there is a duplicate icon in the scene. Uses locality hashing to do so
     /// </summary>

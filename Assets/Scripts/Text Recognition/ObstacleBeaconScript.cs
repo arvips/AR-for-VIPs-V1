@@ -10,6 +10,9 @@ public class ObstacleBeaconScript : MonoBehaviour {
     [Tooltip("Parent object of spawned obstacle beacons.")]
     public GameObject obstacleBeaconManager;
 
+    [Tooltip("Choose a text manager to enable voice feedback.")]
+    public GameObject textManager;
+
     [Tooltip("Choose whether all obstacle beacons produce sound or only those the user is looking at.")]
     public bool spotlightMode = true;
 
@@ -157,14 +160,28 @@ public class ObstacleBeaconScript : MonoBehaviour {
         //Set logarithmic or linear falloff beacon type.
         if (proximityMode)
         {
-            obstacleBeacon = obstacleBeaconLog;
-            wallBeacon = wallBeaconLog;
+            if (obstacleBeacon != obstacleBeaconLog)
+            {
+                obstacleBeacon = obstacleBeaconLog;
+            }
+
+            if (wallBeacon != wallBeaconLog)
+            {
+                wallBeacon = wallBeaconLog;
+            }
         }
 
         else
         {
-            obstacleBeacon = obstacleBeaconLin;
-            wallBeacon = wallBeaconLin;
+            if (obstacleBeacon != obstacleBeaconLin)
+            {
+                obstacleBeacon = obstacleBeaconLin;
+            }
+
+            if (wallBeacon != wallBeaconLin)
+            {
+                wallBeacon = wallBeaconLin;
+            }
         }
     }
 
@@ -210,6 +227,8 @@ public class ObstacleBeaconScript : MonoBehaviour {
     public void SpotlightOn()
     {
         Debug.Log("Spotlight mode on.");
+        GameObject.Find("Spotlight Text").GetComponent<TextMesh>().text = "Spotlight Mode: On";
+        textManager.GetComponent<TextToSpeechGoogle>().playTextGoogle("Spotlight mode on.");
         spotlightMode = true;
         MuteAllObstacleBeacons();
     }
@@ -217,6 +236,8 @@ public class ObstacleBeaconScript : MonoBehaviour {
     public void SpotlightOff()
     {
         Debug.Log("Spotlight mode off.");
+        GameObject.Find("Spotlight Text").GetComponent<TextMesh>().text = "Spotlight Mode: Off";
+        textManager.GetComponent<TextToSpeechGoogle>().playTextGoogle("Spotlight mode off.");
         spotlightMode = false;
         UnmuteAllObstacleBeacons();
     }
@@ -228,6 +249,8 @@ public class ObstacleBeaconScript : MonoBehaviour {
     public void ProximityModeOn()
     {
         Debug.Log("Proximity mode on. Beacons refreshed.");
+        GameObject.Find("Proximity Text").GetComponent<TextMesh>().text = "Proximity Mode: On";
+        textManager.GetComponent<TextToSpeechGoogle>().playTextGoogle("Proximity mode on.");
         proximityMode = true;
         obstacleBeacon = obstacleBeaconLog;
         wallBeacon = wallBeaconLog;
@@ -238,6 +261,8 @@ public class ObstacleBeaconScript : MonoBehaviour {
     public void ProximityModeOff()
     {
         Debug.Log("Proximity mode off. Beacons refreshed.");
+        GameObject.Find("Proximity Text").GetComponent<TextMesh>().text = "Proximity Mode: Off";
+        textManager.GetComponent<TextToSpeechGoogle>().playTextGoogle("Proximity mode off.");
         proximityMode = true;
         obstacleBeacon = obstacleBeaconLin;
         wallBeacon = wallBeaconLin;
@@ -301,7 +326,7 @@ public class ObstacleBeaconScript : MonoBehaviour {
         var gazeDirection = Camera.main.transform.forward;
 
         //Uses spherecast
-        float sphereRadius = 0.05f;
+        float sphereRadius = 0.1f;
 
         //List of hits, if necessary
         //List<RaycastHit> coneCastHitList = new List<RaycastHit>();

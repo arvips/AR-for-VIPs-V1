@@ -27,27 +27,39 @@ public class ControlScript : MonoBehaviour {
 
     #region **INITIALIZATION**
    
+
+    //Gestures and Spatial Processing
     public GestureRecognizer gestureRec;
 
     [Tooltip("Spatial Processing object.")]
     public GameObject spatialProcessing;
 
+
+    //Text
     [Tooltip("Text Manager object.")]
     public GameObject TextManager;
-
 
     [Tooltip("Parent object of spawned text beacons.")]
     public GameObject textBeaconManager;
 
+    [Tooltip("Strings to be used with sample text beacons.")]
+    public string[] sampleText;
+
+    //Testing and Debugging
     [Tooltip("Test object will change color when one of the three core commands are input.")]
     public GameObject testCube;
 
     [Tooltip("This text will change to copy the Debug output.")]
     public GameObject debugText;
 
+    public bool inCoroutine = true;
+
     private int tapCount = 1;
 
     private string output = ""; //helps print text in UI
+
+    private bool stop = false;
+    private bool next = false;
 
 
     void Start () {
@@ -156,7 +168,13 @@ public class ControlScript : MonoBehaviour {
 
     }
 
-    public void ReadText()
+    public void ReadText ()
+    {
+        Debug.Log("Starting read text coroutine.");
+        StartCoroutine(ReadTextRoutine());
+    }
+
+    public IEnumerator ReadTextRoutine()
     {
         Debug.Log("Read Text command activated");
         testCube.GetComponent<Renderer>().material.color = Color.green;
@@ -169,17 +187,38 @@ public class ControlScript : MonoBehaviour {
         {
             foreach (Transform beacon in textBeaconManager.transform)
             {
+                
+                //Stop audio playback on user command
+                if (stop)
+                {
+                    stop = false;
+                    break;
+                }
+                
                 GameObject newCam = GameObject.FindGameObjectWithTag("MainCamera");
                 if (Vector3.Distance(beacon.transform.position, newCam.transform.position) < 50)
                 {
                     //For each beacon, change the audio source to the beacon's audio source and have it read out the beacon's text.
                     string beaconText = beacon.gameObject.GetComponent<TextInstanceScript>().beaconText;
                     Debug.Log("CS: Text is: " + beaconText);
+                    
+                    //code if using TextToSpeechManager
                     //TextManager.GetComponent<TextToSpeechManager>().ttsmAudioSource = beacon.gameObject.GetComponent<AudioSource>();
                     //TextManager.GetComponent<TextToSpeechManager>().SpeakText("Text: " + beaconText);
+
+                    //Set audio source to that of the beacon
                     TextManager.GetComponent<TextToSpeechGoogle>().audioSourceFinal = beacon.gameObject.GetComponent<AudioSource>();
-                    TextManager.transform.position = beacon.transform.position;
-                    StartCoroutine(TextManager.GetComponent<TextToSpeechGoogle>().playTextGoogle("Text: " + beaconText));
+                    //TextManager.transform.position = beacon.transform.position; //Tries to change position of text manager to match beacon
+
+                    //Start playback of current beacon
+                    TextManager.GetComponent<TextToSpeechGoogle>().playTextGoogle(beaconText);
+                    float clipLength = TextManager.GetComponent<TextToSpeechGoogle>().clipLength;
+
+                    //Wait for length of clip.
+                    WaitForSeconds wait = new WaitForSeconds(clipLength);
+
+                    //Debug.Log("Wait time: " + wait);
+                    yield return wait;
                 }
             }
         }
@@ -189,24 +228,49 @@ public class ControlScript : MonoBehaviour {
             //No child text beacons found
             Debug.Log("No text beacons found.");
             //TextManager.GetComponent<TextToSpeechManager>().SpeakText("No text found. Try the command, 'locate text.'");
-            StartCoroutine(TextManager.GetComponent<TextToSpeechGoogle>().playTextGoogle("No text found. Try the command, 'locate text.'"));
-
-
+            //StartCoroutine(TextManager.GetComponent<TextToSpeechGoogle>().playTextGoogle("No text found. Try the command, 'locate text.'"));
+            TextManager.GetComponent<TextToSpeechGoogle>().playTextGoogle("No text found. Try the command, 'locate text.'");
         }
 
         //When done, return audio source to default.
         //TextManager.GetComponent<TextToSpeechManager>().ttsmAudioSource = defaultAudioSource;
         TextManager.GetComponent<TextToSpeechGoogle>().audioSourceFinal = defaultAudioSource;
         TextManager.transform.position = new Vector3(0, 0, 0);
+        yield return null;
+
+    }
+
+    public void stopPlayback()
+    {
+        Debug.Log("Stop playback.");
+        //if (TextManager.transform.position != new Vector3()) 
+        stop = true;
+
+        TextManager.GetComponent<TextToSpeechGoogle>().audioSourceFinal.Stop();
+    }
+
+    public void nextPlayback()
+    {
+        Debug.Log("Skipping to next text.");
+        TextManager.GetComponent<TextToSpeechGoogle>().audioSourceFinal.Stop();
+    }
+
+    public void repeatPlayback()
+    {
+        Debug.Log("Repeating text.");
+        TextManager.GetComponent<TextToSpeechGoogle>().audioSourceFinal.Play();
+
     }
 
     public void increaseSpeed()
     {
+        Debug.Log("Text speed increased to: " + TextManager.GetComponent<TextToSpeechGoogle>().speakingRate);
         TextManager.GetComponent<TextToSpeechGoogle>().increaseSpeechRate();
     }
 
     public void decreaseSpeed()
     {
+        Debug.Log("Text speed decreased to: " + TextManager.GetComponent<TextToSpeechGoogle>().speakingRate);
         TextManager.GetComponent<TextToSpeechGoogle>().decreaseSpeechRate();
     }
 
@@ -225,10 +289,12 @@ public class ControlScript : MonoBehaviour {
 
     public void ClearTextBeacons ()
     {
-        //Destorys all text beacons.
+        //Destroys all text beacons and resets the icon dictionary in Icon Manager.
+        Debug.Log("Text beacons cleared.");
         foreach (Transform child in textBeaconManager.transform)
         {
             Destroy(child.gameObject);
+            TextManager.GetComponent<IconManager>().iconDictionary.Clear();
         }
     }
 
@@ -270,8 +336,19 @@ public class ControlScript : MonoBehaviour {
 
     #endregion
 
+    #region SAMPLE TEXT BEACONS
+
+    public void ShootText(int index)
+    {
+        //Shoots a sample text beacon imbued with text according to index.
+        IconManager textManager = TextManager.GetComponent<IconManager>();
+        textManager.ShootText(sampleText[index]);
+    }
+
+    #endregion
+
     #region MESH PROCESSING
-    
+
     public void ProcessMesh ()
     {
         //Stops scanning and creates planes
@@ -308,5 +385,23 @@ public class ControlScript : MonoBehaviour {
         debugText.GetComponent<TextMesh>().text = "Debug log cleared.";
     }
 
+    public void ToggleDebug()
+    {
+        //Toggles active status of Debug Window.
+        if (debugText.gameObject.transform.parent.gameObject.activeSelf)
+        {
+            debugText.gameObject.transform.parent.gameObject.SetActive(false);
+            Debug.Log("Debug window deactivated.");
+        }
+
+        else
+        {
+            debugText.gameObject.transform.parent.gameObject.SetActive(true);
+            Debug.Log("Debug window reactivated.");
+        }
+    }
+
     #endregion
+
+
 }
