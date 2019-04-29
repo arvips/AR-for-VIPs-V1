@@ -5,6 +5,7 @@ using UnityEngine;
 public class TextInstanceScript : MonoBehaviour {
 
     public string beaconText = "";
+    public bool firstTimeRead = false;
 
 	// Use this for initialization
 	void Start () {

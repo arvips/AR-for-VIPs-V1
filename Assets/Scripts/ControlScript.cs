@@ -66,6 +66,9 @@ public class ControlScript : MonoBehaviour {
     private string repeatText = "No text to repeat.";
     private GameObject repeatBeacon = null;
     private bool isRepeating = false;
+    private Physics physics;
+
+
 
 
 
@@ -87,6 +90,9 @@ public class ControlScript : MonoBehaviour {
 
         gestureRec.StartCapturingGestures();
         Debug.Log("Gesture Recognizer Initialized");
+
+        //Voice confirmation that interface is ready.
+        TextManager.GetComponent<TextToSpeechGoogle>().playTextGoogle("Ready to assist.");
 
     }
 
@@ -132,7 +138,7 @@ public class ControlScript : MonoBehaviour {
     public void HoldCompleted(HoldCompletedEventArgs args)
     {
         //On Hold, activate "Locate Text" command
-        LocateText();
+        CaptureText();
         Debug.Log("Hold Started event registered");
     }
 
@@ -167,21 +173,30 @@ public class ControlScript : MonoBehaviour {
         GetComponentInParent<ObstacleBeaconScript>().ObstaclesOff();
     }
 
-    public void LocateText ()
+    public void CaptureText ()
     {
-        Debug.Log("Locate Text command activated");
+        Debug.Log("Capture Text command activated");
         testCube.GetComponent<Renderer>().material.color = Color.blue;
         TextManager.GetComponent<CameraManager>().BeginManualPhotoMode();
 
+        //Read all text that has just been placed
+        //StartCoroutine(ReadTextRoutine(true, true));
     }
 
     public void ReadText ()
     {
         Debug.Log("Starting read text coroutine.");
-        StartCoroutine(ReadTextRoutine());
+        StartCoroutine(ReadTextRoutine(false, false));
     }
 
-    public IEnumerator ReadTextRoutine()
+    public void ReadAllText()
+    {
+        Debug.Log("Starting read ALL text coroutine.");
+        StartCoroutine(ReadTextRoutine(true, false));
+    }
+
+
+    public IEnumerator ReadTextRoutine(bool allText, bool firstTimeOnly)
     {
         Debug.Log("Read Text command activated");
         readTextRunning = true;
@@ -193,22 +208,41 @@ public class ControlScript : MonoBehaviour {
 
         if (textBeaconManager.transform.childCount > 0)
         {
-            foreach (Transform beacon in textBeaconManager.transform)
+            if (allText) //read everything
             {
-                
-                //Stop audio playback on user command
-                if (stop)
+                if (firstTimeOnly)
+                    //Plays only after text capture.
                 {
-                    stop = false;
-                    break;
+                    //Wait 5 seconds for text to process.
+                    WaitForSeconds wait = new WaitForSeconds(5f);
+                    yield return wait;
                 }
 
-                //If user requested a repeat, wait until it's finished
-                yield return new WaitUntil(() => isRepeating == false);
-                
-                GameObject newCam = GameObject.FindGameObjectWithTag("MainCamera");
-                if (Vector3.Distance(beacon.transform.position, newCam.transform.position) < 50) //check distance to text beacon
+                foreach (Transform beacon in textBeaconManager.transform)
                 {
+
+                    //Stop audio playback on user command
+                    if (stop)
+                    {
+                        stop = false;
+                        break;
+                    }
+
+                    //If user requested a repeat, wait until it's finished
+                    yield return new WaitUntil(() => isRepeating == false);
+
+                    if (firstTimeOnly) 
+                    {
+                        //Play only if this is the beacon's first time being read.
+                        if (beacon.GetComponent<TextInstanceScript>().firstTimeRead)
+                        {
+                            continue;
+                        }
+                        else
+                        {
+                            beacon.GetComponent<TextInstanceScript>().firstTimeRead = true;
+                        }
+                    }
                     //For each beacon, change the audio source to the beacon's audio source and have it read out the beacon's text.
                     string beaconText = beacon.gameObject.GetComponent<TextInstanceScript>().beaconText;
 
@@ -216,14 +250,9 @@ public class ControlScript : MonoBehaviour {
                     repeatText = beaconText; //Sets latest text to be the phrase to repeat.
 
                     Debug.Log("CS: Text is: " + beaconText);
-                    
-                    //code if using TextToSpeechManager
-                    //TextManager.GetComponent<TextToSpeechManager>().ttsmAudioSource = beacon.gameObject.GetComponent<AudioSource>();
-                    //TextManager.GetComponent<TextToSpeechManager>().SpeakText("Text: " + beaconText);
 
                     //Set audio source to that of the beacon
                     TextManager.GetComponent<TextToSpeechGoogle>().audioSourceFinal = beacon.gameObject.GetComponent<AudioSource>();
-                    //TextManager.transform.position = beacon.transform.position; //Tries to change position of text manager to match beacon
 
                     //Start playback of current beacon
                     TextManager.GetComponent<TextToSpeechGoogle>().playTextGoogle(beaconText);
@@ -234,26 +263,91 @@ public class ControlScript : MonoBehaviour {
 
                     //Debug.Log("Wait time: " + wait);
                     yield return wait;
-                }
+
             }
         }
 
+            else //read only what's in the user's Spotlight view 
+            {
+                Debug.Log("Starting read (not all) texts.");
+                //Capture camera's location and orientation
+                var headPosition = Camera.main.transform.position;
+                var gazeDirection = Camera.main.transform.forward;
+
+                float spotlightSize = 1f;
+                float depth = 20;
+                float coneCastAngle = 120;
+
+                bool textBeaconFound = false;
+
+                //Instantiate variable to hold hit info
+                RaycastHit[] spotlightHits = physics.ConeCastAll(headPosition, spotlightSize, gazeDirection, depth, coneCastAngle);
+
+                foreach (RaycastHit hit in spotlightHits)
+                {
+                    if (hit.transform != null)
+                    {
+                        if (hit.transform.IsChildOf(textBeaconManager.transform))
+                        {
+                            //Stop audio playback on user command
+                            if (stop)
+                            {
+                                stop = false;
+                                break;
+                            }
+
+                            //If user requested a repeat, wait until it's finished
+                            yield return new WaitUntil(() => isRepeating == false);
+
+
+                            GameObject beacon = hit.transform.gameObject;
+
+                            //For each beacon, change the audio source to the beacon's audio source and have it read out the beacon's text.
+                            string beaconText = beacon.gameObject.GetComponent<TextInstanceScript>().beaconText;
+                            Debug.Log("Text beacon hit: " + beaconText);
+
+
+                            repeatBeacon = beacon.gameObject; //Sets latest beacon to be the beacon to repeat.
+                            repeatText = beaconText; //Sets latest text to be the phrase to repeat.
+
+                            Debug.Log("CS: Text is: " + beaconText);
+
+                            //Set audio source to that of the beacon
+                            TextManager.GetComponent<TextToSpeechGoogle>().audioSourceFinal = beacon.gameObject.GetComponent<AudioSource>();
+
+                            //Start playback of current beacon
+                            TextManager.GetComponent<TextToSpeechGoogle>().playTextGoogle(beaconText);
+                            float clipLength = TextManager.GetComponent<TextToSpeechGoogle>().clipLength;
+
+                            //Wait for length of clip.
+                            WaitForSeconds wait = new WaitForSeconds(clipLength);
+
+                            textBeaconFound = true;
+
+                            //Debug.Log("Wait time: " + wait);
+                            yield return wait;
+                        }
+                    }
+                }
+
+                if (!textBeaconFound)
+                {
+                    TextManager.GetComponent<TextToSpeechGoogle>().playTextGoogle("No text in this direction. Try again or say read all text.");
+                }
+            }
+        }
         else
         {
             //No child text beacons found
             Debug.Log("No text beacons found.");
-            //TextManager.GetComponent<TextToSpeechManager>().SpeakText("No text found. Try the command, 'locate text.'");
-            //StartCoroutine(TextManager.GetComponent<TextToSpeechGoogle>().playTextGoogle("No text found. Try the command, 'locate text.'"));
-            TextManager.GetComponent<TextToSpeechGoogle>().playTextGoogle("No text found. Try the command, 'locate text.'");
+            TextManager.GetComponent<TextToSpeechGoogle>().playTextGoogle("No text found. Try the command, 'capture text.'");
         }
 
         //When done, return audio source to default.
-        //TextManager.GetComponent<TextToSpeechManager>().ttsmAudioSource = defaultAudioSource;
         TextManager.GetComponent<TextToSpeechGoogle>().audioSourceFinal = defaultAudioSource;
         TextManager.transform.position = new Vector3(0, 0, 0);
         readTextRunning = false;
         yield return null;
-
     }
 
     public void stopPlayback()
@@ -352,7 +446,12 @@ public class ControlScript : MonoBehaviour {
             Destroy(child.gameObject);
             TextManager.GetComponent<IconManager>().iconDictionary.Clear();
         }
-    }
+
+       repeatText = "No text to repeat.";
+       repeatBeacon = null;
+       isRepeating = false;
+
+}
 
     #endregion
 
@@ -420,6 +519,7 @@ public class ControlScript : MonoBehaviour {
         Debug.Log("Restart Scanning activated");
         testCube.GetComponent<Renderer>().material.color = Color.cyan;
         spatialProcessing.GetComponent<PlaySpaceManager>().RestartScanning();
+        TextManager.GetComponent<TextToSpeechGoogle>().playTextGoogle("Restarting scanning.");
 
         //Adjustments needed:
         //1. Adjust meshing behavior to not create walls over doorways

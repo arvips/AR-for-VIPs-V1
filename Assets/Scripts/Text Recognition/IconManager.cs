@@ -50,6 +50,7 @@ public class IconManager: MonoBehaviour {
     private int numIconsDetectedInOneCall;                                  // Used to tell users how many icons were detected after one call
 
     private SettingsManager SettingsManager;
+    public bool creatingIcons = false;
 
     void Start()
     {
@@ -64,6 +65,7 @@ public class IconManager: MonoBehaviour {
     /// </summary>
     public void CreateIcons(string respJson)
     {
+        creatingIcons = true;
         Debug.Log("IM: Create Icons");
         // Indicators and counts
         NewTextDetected = false;
@@ -222,8 +224,8 @@ public class IconManager: MonoBehaviour {
                 GetComponent<TextToSpeechManager>().SpeakText("There are too many icons. Please clear icons before finding new text.");
             }
         }
-        
 
+        creatingIcons = false;
     }
 
     /// <summary>
@@ -301,12 +303,6 @@ public class IconManager: MonoBehaviour {
         //icon.GetComponent<IconAction>().Text = runningText;
         icon.transform.rotation = Quaternion.LookRotation(-centerHit.normal);
 
-        // Change icon size
-        //ChangeCircleIconScale(icon, combinedTopLeft, combinedTopRight, combinedBottomLeft); 
-
-        // Change icon color based on coordinates
-        //icon.GetComponent<Interactible>().OriginalMaterial = GetMaterial(topLeft.y, topRight.y, bottomRight.y, bottomLeft.y, icon);
-
         // Add icon to dictionary to prevent duplicates later on
         int key = LevenshteinDistance.GetLevenshteinKey(runningText);
         List<GameObject> iconList;
@@ -325,6 +321,7 @@ public class IconManager: MonoBehaviour {
         NumIcons++;
         numIconsDetectedInOneCall++;
         NewTextDetected = true;
+
     }
 
     public void PlaceIconsManual(Vector3 iconPos, String runningText)

@@ -91,26 +91,26 @@ public class CameraManager : MonoBehaviour
                 }
             }
         }
-
+        /*
         if (GetComponent<IconManager>().NumIcons > SettingsManager.MaxIcons)
         {
             GetComponent<TextToSpeechManager>().SpeakText("There are too many icons. Please clear icons and try again.");
             return;
         }
-
+        */
         if (detecting == true)
         {
             return;
         }
 
         detecting = true;
-        Debug.Log("CM: Before Async");
+        //Debug.Log("CM: Before Async");
         GameObject newCam = GameObject.FindGameObjectWithTag("MainCamera");
-        Debug.Log("CM: New Cam: " + newCam);
+        //Debug.Log("CM: New Cam: " + newCam);
         oldHoloPos = newCam.transform.position;
-        Debug.Log("CM: Old Holo position: " + oldHoloPos);
+        //Debug.Log("CM: Old Holo position: " + oldHoloPos);
         oldHoloRot = newCam.transform.rotation;
-        Debug.Log("CM: Old Holo rotation: " + oldHoloRot);
+        //Debug.Log("CM: Old Holo rotation: " + oldHoloRot);
         //StartCoroutine(GetComponent<TextReco>().GoogleRequest());
         PhotoCapture.CreateAsync(false, OnPhotoCaptureCreated);
     }
@@ -171,8 +171,12 @@ public class CameraManager : MonoBehaviour
         Debug.Log("CM: managerCameraToWorldMatrix set.");
         photoCaptureObject.TakePhotoAsync(OnCapturedPhotoToMemory);
         //insert sound effect
+        /* camera sound
         cameraAudioSource.clip = cameraSound;
         cameraAudioSource.Play();
+        */
+        //Use google voice
+        this.gameObject.transform.GetComponent<TextToSpeechGoogle>().playTextGoogle("Capturing image. Analyzing...");
         Debug.Log("CM: Sound effect played. TakePhoto Async activated.");
     }
     

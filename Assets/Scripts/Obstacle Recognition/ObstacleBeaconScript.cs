@@ -17,7 +17,7 @@ public class ObstacleBeaconScript : MonoBehaviour {
     public bool spotlightMode = true;
 
     [Tooltip("Choose whether obstacle beacon sound fall off logarthmically (proximity mode on) or linearly (proximity mode off).")]
-    public bool proximityMode = true;
+    public bool proximityMode = false;
 
     [Tooltip("Choose the angle for ConeCasting")]
     public float coneCastAngle;
@@ -123,7 +123,6 @@ public class ObstacleBeaconScript : MonoBehaviour {
             //Mutes and grays all beacons
             MuteAllObstacleBeacons();
 
-
             //Spherecast out from user
 
             //Capture camera's location and orientation
@@ -147,9 +146,14 @@ public class ObstacleBeaconScript : MonoBehaviour {
                             hit.transform.gameObject.GetComponent<Renderer>().material = obstacleMaterial;
                         }
 
-                        else //presuming wall beacon
+                        else if (hit.transform.gameObject.tag == "Wall Beacon")
                         {
                             hit.transform.gameObject.GetComponent<Renderer>().material = wallMaterial;
+                        }
+
+                        else
+                        {
+                            Debug.Log("Beacon tag failure in Update.");
                         }
                     }
                 }
@@ -206,6 +210,9 @@ public class ObstacleBeaconScript : MonoBehaviour {
 
             else { time = 0; }
         }
+
+        textManager.GetComponent<TextToSpeechGoogle>().playTextGoogle("Obstacles on.");
+
     }
 
     public void ObstaclesOff ()
@@ -218,6 +225,9 @@ public class ObstacleBeaconScript : MonoBehaviour {
         {
             time = 0;
         }
+
+        textManager.GetComponent<TextToSpeechGoogle>().playTextGoogle("Obstacles off.");
+
     }
 
     #endregion
@@ -254,8 +264,11 @@ public class ObstacleBeaconScript : MonoBehaviour {
         proximityMode = true;
         obstacleBeacon = obstacleBeaconLog;
         wallBeacon = wallBeaconLog;
-        DeleteBeacons();
-        ConeShot();
+        if (obstacleMode)
+        {
+            DeleteBeacons();
+            ConeShot();
+        }
     }
 
     public void ProximityModeOff()
@@ -326,7 +339,7 @@ public class ObstacleBeaconScript : MonoBehaviour {
         var gazeDirection = Camera.main.transform.forward;
 
         //Uses spherecast
-        float sphereRadius = 0.1f;
+        float sphereRadius = 0.2f;
 
         //List of hits, if necessary
         //List<RaycastHit> coneCastHitList = new List<RaycastHit>();
@@ -354,8 +367,8 @@ public class ObstacleBeaconScript : MonoBehaviour {
                     hit.transform.gameObject.tag == "Ceiling" ||
                     hit.transform.gameObject.tag == "Obstacle Beacon" ||
                     hit.transform.gameObject.tag == "Wall Beacon" ||
-                    hit.point.y <= headPosition.y - 1.5 ||
-                    hit.point.y >= headPosition.y + 2)
+                    hit.point.y <= headPosition.y - 1 ||
+                    hit.point.y >= headPosition.y + 1.5)
                 {
                     //Do nothing
                 }
@@ -413,9 +426,14 @@ public class ObstacleBeaconScript : MonoBehaviour {
                 beacon.gameObject.GetComponent<Renderer>().material = obstacleMaterial;
             }
 
-            else //presuming wall beacon
+            else if (beacon.gameObject.tag == "Wall Beacon")
             {
                 beacon.gameObject.GetComponent<Renderer>().material = wallMaterial;
+            }
+
+            else
+            {
+                Debug.Log("Beacon tag failure.");
             }
 
         }

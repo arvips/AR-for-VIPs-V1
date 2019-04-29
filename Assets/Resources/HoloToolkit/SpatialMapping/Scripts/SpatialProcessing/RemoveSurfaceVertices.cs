@@ -229,6 +229,7 @@ namespace HoloToolkit.Unity.SpatialMapping
             }
 
             Debug.Log("Finished removing vertices.");
+            this.transform.parent.GetComponentInChildren<TextToSpeechGoogle>().playTextGoogle("Mesh processed.");
 
             // We are done removing vertices, trigger an event.
             EventHandler handler = RemoveVerticesComplete;

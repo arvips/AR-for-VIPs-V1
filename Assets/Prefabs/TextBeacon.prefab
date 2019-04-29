@@ -94,7 +94,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: ace86db0ea02a0d419e1710106c9a151, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 304195d568420964d8046fefb197abaa, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
@@ -177,6 +177,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   beaconText: 
+  firstTimeRead: 0
 --- !u!135 &135705564281638014
 SphereCollider:
   m_ObjectHideFlags: 1
@@ -185,7 +186,7 @@ SphereCollider:
   m_GameObject: {fileID: 1925729269249452}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}

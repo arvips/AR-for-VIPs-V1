@@ -50,10 +50,7 @@ public class TextReco : MonoBehaviour {
         {
             string respJson = www.text;
             Debug.Log("TR response JSON received.");
-            if (respJson.Length == 0)
-            {
-                Debug.Log("No text found");
-            }
+
             //Debug.Log(respJson);
 
             // Indicate when no text is detected
@@ -62,6 +59,16 @@ public class TextReco : MonoBehaviour {
                 Debug.Log("TR: Text detected.");
                 GetComponent<IconManager>().CreateIcons(respJson);
             }
+
+            else if (!respJson.Contains("textAnnotations"))
+            {
+                {
+                    Debug.Log("No text found");
+                    this.transform.GetComponent<TextToSpeechGoogle>().playTextGoogle("No text found.");
+                }
+            }
+
+            else Debug.Log("TR: Strange json response.");
         }
 
         else

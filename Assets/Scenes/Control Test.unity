@@ -471,12 +471,12 @@ MonoBehaviour:
           m_CallState: 2
       m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
-  - Keyword: locate text
+  - Keyword: capture text
     Response:
       m_PersistentCalls:
         m_Calls:
         - m_Target: {fileID: 710888732}
-          m_MethodName: LocateText
+          m_MethodName: CaptureText
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -998,6 +998,23 @@ MonoBehaviour:
           m_CallState: 2
       m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
+  - Keyword: read all text
+    Response:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 710888732}
+          m_MethodName: ReadAllText
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 5
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
   IsGlobalListener: 1
   PersistentKeywords: 0
 --- !u!4 &710888729
@@ -1027,9 +1044,9 @@ MonoBehaviour:
   obstacleBeaconManager: {fileID: 2097662777}
   textManager: {fileID: 1403042589}
   spotlightMode: 1
-  proximityMode: 1
-  coneCastAngle: 90
-  spotlightSize: 0.3
+  proximityMode: 0
+  coneCastAngle: 120
+  spotlightSize: 0.5
   distanceRefresh: 1
   obstacleRefreshDistance: 1.5
   obstacleRefreshTime: 8
@@ -1045,8 +1062,8 @@ MonoBehaviour:
   wallMaterial: {fileID: 2100000, guid: 72e18e0d02c99274e9e3b31c87729790, type: 2}
   beaconManager: {fileID: 2097662777}
   depth: 10
-  maxBeacons: 500
-  deviation: 2
+  maxBeacons: 800
+  deviation: 3
   obstacleBeacon: {fileID: 1925729269249452, guid: afafa87d193f47e40ad5e4d0f61738a3,
     type: 2}
   wallBeacon: {fileID: 1925729269249452, guid: f531241af780dde40912fa919d026d50, type: 2}
@@ -1070,9 +1087,9 @@ MonoBehaviour:
   - Bus Stop
   - Stop
   - AC Transit
-  - Durian
-  - Elderberry
-  - Fig
+  - 52
+  - 80
+  - No Parking
   testCube: {fileID: 1821024449}
   debugText: {fileID: 1958269720}
   inCoroutine: 1
@@ -1127,14 +1144,12 @@ MonoBehaviour:
     KeyCode: 114
   - Keyword: obstacles on
     KeyCode: 49
-  - Keyword: locate text
+  - Keyword: capture text
     KeyCode: 50
   - Keyword: read text
     KeyCode: 51
   - Keyword: clear obstacle beacons
     KeyCode: 8
-  - Keyword: clear obstacle beacons
-    KeyCode: 52
   - Keyword: clear text
     KeyCode: 61
   - Keyword: clear text
@@ -1191,6 +1206,8 @@ MonoBehaviour:
     KeyCode: 55
   - Keyword: repeat
     KeyCode: 56
+  - Keyword: read all text
+    KeyCode: 52
   recognitionConfidenceLevel: 1
 --- !u!1001 &1239819179
 Prefab:
@@ -1662,7 +1679,7 @@ TextMesh:
     type: 2}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1692829479}
-  m_Text: 'Proximity Mode: On'
+  m_Text: 'Proximity Mode: Off'
   m_OffsetZ: 0
   m_CharacterSize: 1
   m_LineSpacing: 1

@@ -106,9 +106,9 @@ AudioSource:
   Priority: 128
   DopplerLevel: 3
   MinDistance: 0
-  MaxDistance: 8
+  MaxDistance: 10
   Pan2D: 0
-  rolloffMode: 1
+  rolloffMode: 2
   BypassEffects: 0
   BypassListenerEffects: 0
   BypassReverbZones: 0
@@ -116,28 +116,64 @@ AudioSource:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 2
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
+      time: 0.0039138794
+      value: 1.0028648
+      inSlope: -0.15717837
+      outSlope: -0.15717837
       tangentMode: 0
     - serializedVersion: 2
-      time: 0.20018727
-      value: 0.44462627
-      inSlope: -2.4843528
-      outSlope: -2.4843528
+      time: 0.046055302
+      value: 0.9762466
+      inSlope: -1.4939848
+      outSlope: -1.4939848
       tangentMode: 0
     - serializedVersion: 2
-      time: 0.6948914
-      value: 0.0032043457
-      inSlope: -0.20220876
-      outSlope: -0.20220876
+      time: 0.12018387
+      value: 0.865236
+      inSlope: -2.8535497
+      outSlope: -2.8535497
       tangentMode: 0
     - serializedVersion: 2
-      time: 1
-      value: 0
-      inSlope: -0.017508864
-      outSlope: -0.017508864
+      time: 0.16375571
+      value: 0.7681255
+      inSlope: -3.3283553
+      outSlope: -3.3283553
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 0.24456978
+      value: 0.6274516
+      inSlope: -0.86316895
+      outSlope: -0.86316895
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 0.3777941
+      value: 0.5330633
+      inSlope: -0.5607254
+      outSlope: -0.5607254
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 0.51995593
+      value: 0.47872907
+      inSlope: -0.29462448
+      outSlope: -0.29462448
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 0.70204633
+      value: 0.43913597
+      inSlope: -0.0995372
+      outSlope: -0.0995372
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 0.86290777
+      value: 0.42111096
+      inSlope: -0.094771385
+      outSlope: -0.094771385
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 0.9921684
+      value: 0.40315628
+      inSlope: -0.39237186
+      outSlope: -0.39237186
       tangentMode: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
@@ -205,5 +241,5 @@ SphereCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 1
+  m_Radius: 0.75
   m_Center: {x: 0, y: 0, z: 0}

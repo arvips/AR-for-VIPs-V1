@@ -77,7 +77,7 @@ public class TextToSpeechGoogle : MonoBehaviour
         audioSourceFinal.Play();
         //Debug.Log("TTS: audio source playing last " + audioSourceFinal.isPlaying);
         clipLength = audioClip.length;
-        Debug.Log("Clip length: " + clipLength);
+        //Debug.Log("Clip length: " + clipLength);
         //yield return new WaitForSeconds(audioClip.length);
         //return null;
     }
