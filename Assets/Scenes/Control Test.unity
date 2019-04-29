@@ -1580,6 +1580,11 @@ Prefab:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 114812681035175298, guid: d29bc40b7f3df26479d6a0aac211c355,
+        type: 2}
+      propertyPath: RotationSize
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: d29bc40b7f3df26479d6a0aac211c355, type: 2}
   m_IsPrefabParent: 0
@@ -1611,7 +1616,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1692829479}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.3, y: 0, z: 0}
+  m_LocalPosition: {x: -0.2, y: 0, z: 0}
   m_LocalScale: {x: 0.005, y: 0.005, z: 0.005}
   m_Children: []
   m_Father: {fileID: 671967751}
@@ -1834,7 +1839,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1821024450
 Transform:
   m_ObjectHideFlags: 0
@@ -2022,7 +2027,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1958269720}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.25, y: 0, z: 0}
+  m_LocalPosition: {x: -0.1, y: 0, z: 0}
   m_LocalScale: {x: 0.005, y: 0.005, z: 0.005}
   m_Children: []
   m_Father: {fileID: 671967751}
@@ -2072,7 +2077,7 @@ TextMesh:
   m_OffsetZ: 0
   m_CharacterSize: 1
   m_LineSpacing: 1
-  m_Anchor: 7
+  m_Anchor: 6
   m_Alignment: 0
   m_TabSize: 4
   m_FontSize: 40
@@ -2145,7 +2150,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1960011207}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.3, y: 0.024, z: 0}
+  m_LocalPosition: {x: -0.2, y: 0.024, z: 0}
   m_LocalScale: {x: 0.005, y: 0.005, z: 0.005}
   m_Children: []
   m_Father: {fileID: 671967751}

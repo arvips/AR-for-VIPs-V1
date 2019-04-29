@@ -59,7 +59,14 @@ public class ControlScript : MonoBehaviour {
     private string output = ""; //helps print text in UI
 
     private bool stop = false;
-    private bool next = false;
+
+    private bool readTextRunning = false;
+
+
+    private string repeatText = "No text to repeat.";
+    private GameObject repeatBeacon = null;
+    private bool isRepeating = false;
+
 
 
     void Start () {
@@ -177,6 +184,7 @@ public class ControlScript : MonoBehaviour {
     public IEnumerator ReadTextRoutine()
     {
         Debug.Log("Read Text command activated");
+        readTextRunning = true;
         testCube.GetComponent<Renderer>().material.color = Color.green;
 
         //Note current audio source of Text Manager
@@ -194,12 +202,19 @@ public class ControlScript : MonoBehaviour {
                     stop = false;
                     break;
                 }
+
+                //If user requested a repeat, wait until it's finished
+                yield return new WaitUntil(() => isRepeating == false);
                 
                 GameObject newCam = GameObject.FindGameObjectWithTag("MainCamera");
-                if (Vector3.Distance(beacon.transform.position, newCam.transform.position) < 50)
+                if (Vector3.Distance(beacon.transform.position, newCam.transform.position) < 50) //check distance to text beacon
                 {
                     //For each beacon, change the audio source to the beacon's audio source and have it read out the beacon's text.
                     string beaconText = beacon.gameObject.GetComponent<TextInstanceScript>().beaconText;
+
+                    repeatBeacon = beacon.gameObject; //Sets latest beacon to be the beacon to repeat.
+                    repeatText = beaconText; //Sets latest text to be the phrase to repeat.
+
                     Debug.Log("CS: Text is: " + beaconText);
                     
                     //code if using TextToSpeechManager
@@ -236,6 +251,7 @@ public class ControlScript : MonoBehaviour {
         //TextManager.GetComponent<TextToSpeechManager>().ttsmAudioSource = defaultAudioSource;
         TextManager.GetComponent<TextToSpeechGoogle>().audioSourceFinal = defaultAudioSource;
         TextManager.transform.position = new Vector3(0, 0, 0);
+        readTextRunning = false;
         yield return null;
 
     }
@@ -257,8 +273,48 @@ public class ControlScript : MonoBehaviour {
 
     public void repeatPlayback()
     {
+        StartCoroutine(repeatPlaybackRoutine());
+
+    }
+
+    public IEnumerator repeatPlaybackRoutine()
+    {
         Debug.Log("Repeating text.");
-        TextManager.GetComponent<TextToSpeechGoogle>().audioSourceFinal.Play();
+        isRepeating = true;
+
+        //Note current audio source of Text Manager
+        AudioSource defaultAudioSource = TextManager.GetComponent<TextToSpeechGoogle>().audioSourceFinal;
+
+        if (readTextRunning)
+        {
+            //If read text is currently running, have TextToSpeechGoogle's audio source play the current clip again and reset the wait time.
+            TextManager.GetComponent<TextToSpeechGoogle>().audioSourceFinal.Play();
+            WaitForSeconds wait = new WaitForSeconds(TextManager.GetComponent<TextToSpeechGoogle>().clipLength);
+            yield return wait;
+        }
+
+        else
+        {
+            //Set audio source to that of the beacon
+            if (repeatBeacon != null) TextManager.GetComponent<TextToSpeechGoogle>().audioSourceFinal = repeatBeacon.gameObject.GetComponent<AudioSource>();
+            else TextManager.GetComponent<TextToSpeechGoogle>().audioSourceFinal = defaultAudioSource;
+            //TextManager.transform.position = beacon.transform.position; //Tries to change position of text manager to match beacon
+
+            //Start playback of current beacon
+            TextManager.GetComponent<TextToSpeechGoogle>().playTextGoogle(repeatText);
+            float clipLength = TextManager.GetComponent<TextToSpeechGoogle>().clipLength;
+
+            //Wait for length of clip.
+            WaitForSeconds wait = new WaitForSeconds(clipLength);
+
+            //Debug.Log("Wait time: " + wait);
+            yield return wait;
+        }
+
+        //Reset audio source to the default.
+        TextManager.GetComponent<TextToSpeechGoogle>().audioSourceFinal = defaultAudioSource;
+        isRepeating = false;
+        yield return null;
 
     }
 

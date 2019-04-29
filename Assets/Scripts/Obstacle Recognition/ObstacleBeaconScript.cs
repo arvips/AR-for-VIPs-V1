@@ -349,8 +349,13 @@ public class ObstacleBeaconScript : MonoBehaviour {
 
             if (hit.transform != null)
             {
-                //Check whether hit item is a floor, a ceiling, or another beacon; if not, instantiate beacon
-                if (hit.transform.gameObject.tag == "Floor" || hit.transform.gameObject.tag == "Ceiling" || hit.transform.gameObject.tag == "Obstacle Beacon" || hit.transform.gameObject.tag == "Wall Beacon")
+                //Check whether hit item is a floor, a ceiling, or another beacon; or if it's above 2m or below 1.5m of the camera; if not, instantiate beacon
+                if (hit.transform.gameObject.tag == "Floor" ||
+                    hit.transform.gameObject.tag == "Ceiling" ||
+                    hit.transform.gameObject.tag == "Obstacle Beacon" ||
+                    hit.transform.gameObject.tag == "Wall Beacon" ||
+                    hit.point.y <= headPosition.y - 1.5 ||
+                    hit.point.y >= headPosition.y + 2)
                 {
                     //Do nothing
                 }
