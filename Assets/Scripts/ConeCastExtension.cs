@@ -16,6 +16,7 @@ public static class ConeCastExtension
                 Vector3 hitPoint = sphereCastHits[i].point;
                 Vector3 directionToHit = hitPoint - origin;
                 float angleToHit = Vector3.Angle(direction, directionToHit);
+                //Debug.Log("Angle to hit: " + sphereCastHits[i].transform.gameObject.name + " " + angleToHit);
 
                 if (angleToHit < coneAngle)
                 {

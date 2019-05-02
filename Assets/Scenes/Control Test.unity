@@ -1084,12 +1084,12 @@ MonoBehaviour:
   TextManager: {fileID: 1403042589}
   textBeaconManager: {fileID: 112487223}
   sampleText:
-  - Bus Stop
-  - Stop
-  - AC Transit
+  - Bus Stop 52
+  - Bus Stop 80
+  - Pedestrian Crossing
   - 52
   - 80
-  - No Parking
+  - AC Transit
   testCube: {fileID: 1821024449}
   debugText: {fileID: 1958269720}
   inCoroutine: 1
@@ -1390,6 +1390,7 @@ MonoBehaviour:
   Icon: {fileID: 1925729269249452, guid: def80b761fcc7ba49843b5dfb51828ec, type: 2}
   textBeaconManager: {fileID: 112487223}
   defaultTextDistance: 0
+  creatingIcons: 0
 --- !u!114 &1403042595
 MonoBehaviour:
   m_ObjectHideFlags: 0

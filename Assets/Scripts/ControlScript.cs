@@ -186,17 +186,17 @@ public class ControlScript : MonoBehaviour {
     public void ReadText ()
     {
         Debug.Log("Starting read text coroutine.");
-        StartCoroutine(ReadTextRoutine(false, false));
+        StartCoroutine(ReadTextRoutine(false));
     }
 
     public void ReadAllText()
     {
         Debug.Log("Starting read ALL text coroutine.");
-        StartCoroutine(ReadTextRoutine(true, false));
+        StartCoroutine(ReadTextRoutine(true));
     }
 
 
-    public IEnumerator ReadTextRoutine(bool allText, bool firstTimeOnly)
+    public IEnumerator ReadTextRoutine(bool allText)
     {
         Debug.Log("Read Text command activated");
         readTextRunning = true;
@@ -210,13 +210,6 @@ public class ControlScript : MonoBehaviour {
         {
             if (allText) //read everything
             {
-                if (firstTimeOnly)
-                    //Plays only after text capture.
-                {
-                    //Wait 5 seconds for text to process.
-                    WaitForSeconds wait = new WaitForSeconds(5f);
-                    yield return wait;
-                }
 
                 foreach (Transform beacon in textBeaconManager.transform)
                 {
@@ -228,41 +221,33 @@ public class ControlScript : MonoBehaviour {
                         break;
                     }
 
-                    //If user requested a repeat, wait until it's finished
-                    yield return new WaitUntil(() => isRepeating == false);
+                    //If user requested a repeat, wait until it's finished (TEMPORARILY DISABLED)
+                    //yield return new WaitUntil(() => isRepeating == false);
 
-                    if (firstTimeOnly) 
-                    {
-                        //Play only if this is the beacon's first time being read.
-                        if (beacon.GetComponent<TextInstanceScript>().firstTimeRead)
-                        {
-                            continue;
-                        }
-                        else
-                        {
-                            beacon.GetComponent<TextInstanceScript>().firstTimeRead = true;
-                        }
-                    }
                     //For each beacon, change the audio source to the beacon's audio source and have it read out the beacon's text.
-                    string beaconText = beacon.gameObject.GetComponent<TextInstanceScript>().beaconText;
 
-                    repeatBeacon = beacon.gameObject; //Sets latest beacon to be the beacon to repeat.
-                    repeatText = beaconText; //Sets latest text to be the phrase to repeat.
+                    if (beacon.gameObject!= null)
+                    {
+                        string beaconText = beacon.gameObject.GetComponent<TextInstanceScript>().beaconText;
 
-                    Debug.Log("CS: Text is: " + beaconText);
+                        repeatBeacon = beacon.gameObject; //Sets latest beacon to be the beacon to repeat.
+                        repeatText = beaconText; //Sets latest text to be the phrase to repeat.
 
-                    //Set audio source to that of the beacon
-                    TextManager.GetComponent<TextToSpeechGoogle>().audioSourceFinal = beacon.gameObject.GetComponent<AudioSource>();
+                        Debug.Log("CS: Text is: " + beaconText);
 
-                    //Start playback of current beacon
-                    TextManager.GetComponent<TextToSpeechGoogle>().playTextGoogle(beaconText);
-                    float clipLength = TextManager.GetComponent<TextToSpeechGoogle>().clipLength;
+                        //Set audio source to that of the beacon
+                        TextManager.GetComponent<TextToSpeechGoogle>().audioSourceFinal = beacon.gameObject.GetComponent<AudioSource>();
 
-                    //Wait for length of clip.
-                    WaitForSeconds wait = new WaitForSeconds(clipLength);
+                        //Start playback of current beacon
+                        TextManager.GetComponent<TextToSpeechGoogle>().playTextGoogle(beaconText);
+                        float clipLength = TextManager.GetComponent<TextToSpeechGoogle>().clipLength;
 
-                    //Debug.Log("Wait time: " + wait);
-                    yield return wait;
+                        //Wait for length of clip.
+                        WaitForSeconds wait = new WaitForSeconds(clipLength);
+
+                        //Debug.Log("Wait time: " + wait);
+                        yield return wait;
+                    }
 
             }
         }
@@ -274,7 +259,7 @@ public class ControlScript : MonoBehaviour {
                 var headPosition = Camera.main.transform.position;
                 var gazeDirection = Camera.main.transform.forward;
 
-                float spotlightSize = 1f;
+                float spotlightSize = 2f;
                 float depth = 20;
                 float coneCastAngle = 120;
 
@@ -296,36 +281,39 @@ public class ControlScript : MonoBehaviour {
                                 break;
                             }
 
-                            //If user requested a repeat, wait until it's finished
-                            yield return new WaitUntil(() => isRepeating == false);
+                            //If user requested a repeat, wait until it's finished (TEMPORARILY DISABLED)
+                            //yield return new WaitUntil(() => isRepeating == false);
+
+                            if (hit.transform.gameObject != null)
+                            {
+                                GameObject beacon = hit.transform.gameObject;
+
+                                //For each beacon, change the audio source to the beacon's audio source and have it read out the beacon's text.
+                                string beaconText = beacon.gameObject.GetComponent<TextInstanceScript>().beaconText;
+                                //Debug.Log("Text beacon hit: " + beaconText);
 
 
-                            GameObject beacon = hit.transform.gameObject;
+                                repeatBeacon = beacon.gameObject; //Sets latest beacon to be the beacon to repeat.
+                                repeatText = beaconText; //Sets latest text to be the phrase to repeat.
 
-                            //For each beacon, change the audio source to the beacon's audio source and have it read out the beacon's text.
-                            string beaconText = beacon.gameObject.GetComponent<TextInstanceScript>().beaconText;
-                            Debug.Log("Text beacon hit: " + beaconText);
+                                Debug.Log("CS: Text is: " + beaconText);
 
+                                //Set audio source to that of the beacon
+                                TextManager.GetComponent<TextToSpeechGoogle>().audioSourceFinal = beacon.gameObject.GetComponent<AudioSource>();
 
-                            repeatBeacon = beacon.gameObject; //Sets latest beacon to be the beacon to repeat.
-                            repeatText = beaconText; //Sets latest text to be the phrase to repeat.
+                                //Start playback of current beacon
+                                TextManager.GetComponent<TextToSpeechGoogle>().playTextGoogle(beaconText);
+                                float clipLength = TextManager.GetComponent<TextToSpeechGoogle>().clipLength;
 
-                            Debug.Log("CS: Text is: " + beaconText);
+                                //Wait for length of clip.
+                                WaitForSeconds wait = new WaitForSeconds(clipLength);
 
-                            //Set audio source to that of the beacon
-                            TextManager.GetComponent<TextToSpeechGoogle>().audioSourceFinal = beacon.gameObject.GetComponent<AudioSource>();
+                                textBeaconFound = true;
 
-                            //Start playback of current beacon
-                            TextManager.GetComponent<TextToSpeechGoogle>().playTextGoogle(beaconText);
-                            float clipLength = TextManager.GetComponent<TextToSpeechGoogle>().clipLength;
-
-                            //Wait for length of clip.
-                            WaitForSeconds wait = new WaitForSeconds(clipLength);
-
-                            textBeaconFound = true;
-
-                            //Debug.Log("Wait time: " + wait);
-                            yield return wait;
+                                //Debug.Log("Wait time: " + wait);
+                                yield return wait;
+                            }
+                           
                         }
                     }
                 }
@@ -347,6 +335,7 @@ public class ControlScript : MonoBehaviour {
         TextManager.GetComponent<TextToSpeechGoogle>().audioSourceFinal = defaultAudioSource;
         TextManager.transform.position = new Vector3(0, 0, 0);
         readTextRunning = false;
+        stop = false;
         yield return null;
     }
 
