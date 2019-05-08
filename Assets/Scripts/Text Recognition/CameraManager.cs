@@ -162,13 +162,12 @@ public class CameraManager : MonoBehaviour
     /// </summary>
     private void TakePhoto()
     {
-        Debug.Log("CM: takephoto");
-        GetComponent<TextToSpeechManager>().SpeakText("Detecting Text");
-        Debug.Log("CM: Text to speech manager retrieved.");
+        Debug.Log("CM: TakePhoto activated.");
+
 
         // Keep cameraToWorldMatrix for placing icons into the real world and take photo
         managerCameraToWorldMatrix = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>().cameraToWorldMatrix;
-        Debug.Log("CM: managerCameraToWorldMatrix set.");
+        //Debug.Log("CM: managerCameraToWorldMatrix set.");
         photoCaptureObject.TakePhotoAsync(OnCapturedPhotoToMemory);
         //insert sound effect
         /* camera sound
@@ -194,14 +193,14 @@ public class CameraManager : MonoBehaviour
         if (result.success)
         {
             // Convert image into image bytes
-            Debug.Log("CM: OCPtM: result.success if statement triggered.");
+            //Debug.Log("CM: OCPtM: result.success if statement triggered.");
             Texture2D targetTexture = new Texture2D(cameraResolution.width, cameraResolution.height);                               // Create our Texture2D for use and set the correct resolution
             photoCaptureFrame.UploadImageDataToTexture(targetTexture);                                                              // Copy the raw image data into our target texture, then convert to byte array
             byte[] imageBytes = targetTexture.EncodeToPNG();
 
-            Debug.Log("CM: OCPM: PreCoroutine");
+            //Debug.Log("CM: OCPM: PreCoroutine");
             StartCoroutine(GetComponent<TextReco>().GoogleRequest(imageBytes));                                                   // Begin Google API call
-            Debug.Log("CM: OCPM: PostCoroutine");
+            //Debug.Log("CM: OCPM: PostCoroutine");
             if (SettingsManager.OCRSetting == OCRRunSetting.Manual)                                                                 // Stop PhotoMode if in manual mode (restart on another call)
             {
                 GetComponent<CameraManager>().StopPhotoMode();
@@ -212,7 +211,7 @@ public class CameraManager : MonoBehaviour
     public void StopPhotoMode()
     {
         photoCaptureObject.StopPhotoModeAsync(OnStoppedPhotoMode);
-        Debug.Log("CM: Photo mode stopped.");
+        //Debug.Log("CM: Photo mode stopped.");
     }
 
     /// <summary>

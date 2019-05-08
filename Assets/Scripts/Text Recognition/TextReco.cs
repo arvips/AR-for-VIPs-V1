@@ -33,13 +33,13 @@ public class TextReco : MonoBehaviour {
         var header = new Dictionary<string, string>() {
             { "Content-Type", "application/json" }
         };
-        Debug.Log("TR: Request to API (header) sent");
+       // Debug.Log("TR: Request to API (header) sent");
 
         var data = Encoding.UTF8.GetBytes(json);
-        Debug.Log("TR: data encoded.");
+        //Debug.Log("TR: data encoded.");
 
         WWW www = new WWW(url, data, header);
-        Debug.Log("TR: www created.");
+        //Debug.Log("TR: www created.");
         
 
         // Send API

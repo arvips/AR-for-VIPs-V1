@@ -53,9 +53,7 @@ public class ControlScript : MonoBehaviour {
     public GameObject debugText;
 
     public bool inCoroutine = true;
-
-    private int tapCount = 1;
-
+    
     private string output = ""; //helps print text in UI
 
     private bool stop = false;
@@ -137,14 +135,14 @@ public class ControlScript : MonoBehaviour {
 
     public void HoldCompleted(HoldCompletedEventArgs args)
     {
-        //On Hold, activate "Locate Text" command
+        //On Hold, activate "Locate Text" command. (CURRENTLY DISABLED)
         CaptureText();
         Debug.Log("Hold Started event registered");
     }
 
     public void ManipulationCompleted(ManipulationCompletedEventArgs args)
     {
-        //On Manipulation (tap and move), activate "Read Text" command
+        //On Manipulation (tap and move), activate "Read Text" command (CURRENTLY DISABLED)
         ReadText();
         Debug.Log("Manipulation Started event registered");
     }
@@ -350,6 +348,7 @@ public class ControlScript : MonoBehaviour {
 
     public void nextPlayback()
     {
+        //NOTE: The next command may still wait the full length of the current clip before going to the next one. This should be fixed.
         Debug.Log("Skipping to next text.");
         TextManager.GetComponent<TextToSpeechGoogle>().audioSourceFinal.Stop();
     }

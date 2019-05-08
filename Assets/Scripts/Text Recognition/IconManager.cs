@@ -66,7 +66,7 @@ public class IconManager: MonoBehaviour {
     public void CreateIcons(string respJson)
     {
         creatingIcons = true;
-        Debug.Log("IM: Create Icons");
+        //Debug.Log("IM: Create Icons");
         // Indicators and counts
         NewTextDetected = false;
         numIconsDetectedInOneCall = 0;
@@ -91,9 +91,9 @@ public class IconManager: MonoBehaviour {
         // Camera properties
         ScaleX = (float)Screen.width / (float)CameraManager.cameraResolution.width;
         ScaleY = (float)Screen.height / (float)CameraManager.cameraResolution.height;
-        Debug.Log("IM: Screen width: " + (float)Screen.width);
-        Debug.Log("IM: Camera resolution width: " + (float)CameraManager.cameraResolution.width);
-        Debug.Log("IM: ScaleX: " + ScaleX);
+        //Debug.Log("IM: Screen width: " + (float)Screen.width);
+        //Debug.Log("IM: Camera resolution width: " + (float)CameraManager.cameraResolution.width);
+        //Debug.Log("IM: ScaleX: " + ScaleX);
         Matrix4x4 cameraToWorldMatrix = GetComponent<CameraManager>().managerCameraToWorldMatrix;
 
         raycastCamera = GetComponent<CameraManager>().PositionCamera(cameraToWorldMatrix);                      // Position camera to where you took a picture
@@ -166,7 +166,7 @@ public class IconManager: MonoBehaviour {
 
                 if (runningText.Length > 1)                                                                     // Make sure you have text to put into the icon
                 {
-                    Debug.Log("IM: Shoot raycast");
+                    //Debug.Log("IM: Shoot raycast");
                     if (Physics.Raycast(lastRay, out centerHit, 15.0f, RaycastLayer))                           // First try and hit the spatial mapping with the ray
                     {
                         PlaceIcons(centerHit, runningText, currTopLeft, currTopRight, currBottomRight, currBottomLeft, combinedTopLeft, combinedTopRight, combinedBottomRight, combinedBottomLeft);
@@ -326,7 +326,7 @@ public class IconManager: MonoBehaviour {
 
     public void PlaceIconsManual(Vector3 iconPos, String runningText)
     {
-        Debug.Log("IM: manual Place Icons");
+        //Debug.Log("IM: manual Place Icons");
         if (SameIconExists(iconPos, runningText))                   // Avoid duplicates
         {
             return;
