@@ -488,6 +488,26 @@ public class ControlScript : MonoBehaviour {
         textManager.ShootText(sampleText[index]);
     }
 
+    public void DemoCaptureText (int index)
+    {
+        //Replicates experience of capturing text without using camera. Ideal for use while capturing video.
+        
+            Debug.Log("Starting demo capture text routine. Index: " + index);
+            StartCoroutine(DemoCaptureTextRoutine(index));
+        
+    }
+
+    public IEnumerator DemoCaptureTextRoutine (int index)
+    {
+        IconManager textManager = TextManager.GetComponent<IconManager>();
+        TextManager.GetComponent<TextToSpeechGoogle>().playTextGoogle("Capturing image. Analyzing...");
+        WaitForSeconds wait = new WaitForSeconds(4f);
+        yield return wait; 
+
+        textManager.ShootText(sampleText[index]);
+
+    }
+
     #endregion
 
     #region MESH PROCESSING
@@ -496,6 +516,7 @@ public class ControlScript : MonoBehaviour {
     {
         //Stops scanning and creates planes
         Debug.Log("Process Mesh activated");
+        ObstaclesOff();
         spatialProcessing.GetComponent<PlaySpaceManager>().ProcessMesh();
         testCube.GetComponent<Renderer>().material.color = Color.yellow;
 
@@ -505,6 +526,7 @@ public class ControlScript : MonoBehaviour {
     {
         //Destroys planes and restarts scanning
         Debug.Log("Restart Scanning activated");
+        ObstaclesOff();
         testCube.GetComponent<Renderer>().material.color = Color.cyan;
         spatialProcessing.GetComponent<PlaySpaceManager>().RestartScanning();
         TextManager.GetComponent<TextToSpeechGoogle>().playTextGoogle("Restarting scanning.");

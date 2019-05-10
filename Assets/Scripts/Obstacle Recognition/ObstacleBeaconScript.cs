@@ -279,8 +279,12 @@ public class ObstacleBeaconScript : MonoBehaviour {
         proximityMode = true;
         obstacleBeacon = obstacleBeaconLin;
         wallBeacon = wallBeaconLin;
-        DeleteBeacons();
-        ConeShot();
+        if (obstacleMode)
+        {
+            DeleteBeacons();
+            ConeShot();
+        }
+        
     }
 
     #endregion

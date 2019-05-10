@@ -879,51 +879,51 @@ MonoBehaviour:
           m_CallState: 2
       m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
-  - Keyword: shoot text 4
+  - Keyword: demo capture text 1
     Response:
       m_PersistentCalls:
         m_Calls:
         - m_Target: {fileID: 710888732}
-          m_MethodName: ShootText
+          m_MethodName: DemoCaptureText
           m_Mode: 3
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
             m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 3
+            m_IntArgument: 0
             m_FloatArgument: 0
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
       m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
-  - Keyword: shoot text 5
+  - Keyword: demo capture text 2
     Response:
       m_PersistentCalls:
         m_Calls:
         - m_Target: {fileID: 710888732}
-          m_MethodName: ShootText
+          m_MethodName: DemoCaptureText
           m_Mode: 3
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
             m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 4
+            m_IntArgument: 1
             m_FloatArgument: 0
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
       m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
-  - Keyword: shoot text 6
+  - Keyword: demo catpure text 3
     Response:
       m_PersistentCalls:
         m_Calls:
         - m_Target: {fileID: 710888732}
-          m_MethodName: ShootText
+          m_MethodName: DemoCaptureText
           m_Mode: 3
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
             m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 5
+            m_IntArgument: 2
             m_FloatArgument: 0
             m_StringArgument: 
             m_BoolArgument: 0
@@ -1086,7 +1086,7 @@ MonoBehaviour:
   sampleText:
   - Bus Stop 52
   - Bus Stop 80
-  - Pedestrian Crossing
+  - Wait for Pedestrians
   - 52
   - 80
   - AC Transit
@@ -1138,8 +1138,6 @@ MonoBehaviour:
   Keywords:
   - Keyword: obstacles
     KeyCode: 111
-  - Keyword: locate text
-    KeyCode: 108
   - Keyword: read text
     KeyCode: 114
   - Keyword: obstacles on
@@ -1192,12 +1190,6 @@ MonoBehaviour:
     KeyCode: 283
   - Keyword: shoot text 3
     KeyCode: 284
-  - Keyword: shoot text 4
-    KeyCode: 285
-  - Keyword: shoot text 5
-    KeyCode: 286
-  - Keyword: shoot text 6
-    KeyCode: 287
   - Keyword: toggle debug
     KeyCode: 92
   - Keyword: stop
@@ -1206,8 +1198,12 @@ MonoBehaviour:
     KeyCode: 55
   - Keyword: repeat
     KeyCode: 56
-  - Keyword: read all text
-    KeyCode: 52
+  - Keyword: demo capture text 1
+    KeyCode: 285
+  - Keyword: demo capture text 2
+    KeyCode: 286
+  - Keyword: demo catpure text 3
+    KeyCode: 287
   recognitionConfidenceLevel: 1
 --- !u!1001 &1239819179
 Prefab:
