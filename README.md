@@ -1,5 +1,7 @@
 # Augmented Reality for Visually Impaired People (AR For VIPs)
 
+http://arvips.squarespace.com/
+
 AR for VIPs is an application designed to turn the Microsoft HoloLens 1 into an assistive device for visually impaired people. It does so by sonifying obstacles via the spatial mesh that the HoloLens creates, and using text recognition and text to speech algorithms from Google to allow blind users to read text at a distance.  
 
 It was created by University of California, Berkeley, School of Information graduate students Dylan Fox, Alyssa Li, Anu Pandey, and Rohan Kar, and Virtual Reality at Berkeley undergraduates Rajandeep Singh, Manish Kondapalu, Teresa Pho, and Elliot Choi.
@@ -96,28 +98,48 @@ This section writes debug content to the debug text window, and also allows user
 This script simply helps display the help text in the inspector for Script Manager.
 
 #### Obstacle Recognition Scripts
+**Obstacle Beacon Script**
+This is the second most important script in the application after Control Script. It manages the functions & part of the interfaces for all obstacle and wall beacons.
+
+**Shoot Beacon**
+This can be used to shoot a single beacon. Primarily used for testing purposes.
+
+**ConeCastExtension**
+This is used to turn spherecast into "conecast," making it more faithful to the "spotlight" metaphor. Script taken from https://github.com/walterellisfun/ConeCast 
 
 #### Text Recognition Scripts
 
 #### Mesh Processing Scripts
+**PlaySpaceManager**
+This script controls the surface observer object that creates the spatial mesh. You can use it to adjust various components of the meshing process, including the ability to process the mesh. Note that it works with the "Spatial Processing" script in the HoloToolkit.
 
 #### Audio Scripts
-
+**ObstacleAudio** 
+This script is currently not used, but is intended to adjust the pitch of obstacles based on their height compared to the user.
 
 
 ## Prefabs
 #### Obstacle Beacon (Linear and Logarithmic)
+These are the beacons used for basic obstacle detection. The only difference between Linear and Logarithmic is in the 3d Sound Settings distance dropoff curve; linear is tuned to be audible from farther away, whereas logarithmic makes it easier to tell as you get closer to a beacon.
+
+Note that the Sphere Collider Radius can be adjusted to determine how many beacons will pack into an area.
+
+Note that the Audio Clip attached to this object is a very important part of sound design!
 
 #### Wall Beacon (Linear and Logarithmic) 
+Same as Obstacle Beacon, but uses a more subtle sound clip. Placed on meshes identified as walls.
 
 #### Text Beacon
+These are placed whenever text is identified at the approximate location of the text. The "Text Instance Script" attached it to it holds the text that the beacon represents.
 
 #### Spatial Processing
+This object goes with the managers and contains scripts to perform spatial processing.
 
 #### Spatial Mapping (1)
+This is the default mesh that is used in the Unity preview window. If running the application in the HoloLens, it will be ignored.
 
 #### Text Camera
-
+This camera is instantiated whenever Capture Text is called so that the application can keep track separately of what was in view when the command was called.
 
 
 ## Audio Samples
@@ -132,10 +154,17 @@ The main scene used for our application. Includes all of the objects listed in t
 ## Resources
 
 #### HoloToolkit
+A collection of important assets for HoloLens functioning in Unity. See: 
+https://github.com/Microsoft/MixedRealityToolkit-Unity/releases/tag/2017.4.3.0-Refresh
 
 #### HoloToolkit Examples
+Examples of how assets in the HoloToolkit can be used.
 
 #### Mixed Reality Toolkit (Audio Manager)
-
+The audio manager had to be taken from a separate version of the HoloLens toolkit.
 
 #### Simple JSON
+Used to help parse the JSON received as part of text recognition.
+
+
+For more information, contact dylan dot r dot fox at berkeley dot edu.

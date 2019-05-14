@@ -12,7 +12,7 @@ PlayerSettings:
   useOnDemandResources: 0
   accelerometerFrequency: 60
   companyName: UC Berkeley
-  productName: AR for VIPs 05_10_19
+  productName: AR for VIPs 05_14_19
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
   m_SplashScreenBackgroundColor: {r: 0.13725491, g: 0.12156863, b: 0.1254902, a: 1}
@@ -39,7 +39,8 @@ PlayerSettings:
     width: 1
     height: 1
   m_SplashScreenLogos: []
-  m_VirtualRealitySplashScreen: {fileID: 0}
+  m_VirtualRealitySplashScreen: {fileID: 2800000, guid: cf63e7f3618e42d47834ecc7a3c36cf1,
+    type: 3}
   m_HolographicTrackingLossScreen: {fileID: 0}
   defaultScreenWidth: 1024
   defaultScreenHeight: 768
@@ -563,21 +564,26 @@ PlayerSettings:
   apiCompatibilityLevelPerPlatform: {}
   m_RenderingPath: 1
   m_MobileRenderingPath: 1
-  metroPackageName: HoloCube2017
+  metroPackageName: ARforVIPs
   metroPackageVersion: 1.0.0.0
   metroCertificatePath: Assets\WSATestCertificate.pfx
   metroCertificatePassword: 
   metroCertificateSubject: DefaultCompany
   metroCertificateIssuer: DefaultCompany
   metroCertificateNotAfter: 00db2505cf07d601
-  metroApplicationDescription: HoloCube2017
-  wsaImages: {}
-  metroTileShortName: AR for VIPs 05_02_19
+  metroApplicationDescription: Augmented Reality for Visually Impaired People
+  wsaImages:
+    983220: Assets/Resources/Icons/Icon square 558.png
+    2031816: Assets/Resources/Icons/Icon square 88.png
+    2097352: Assets/Resources/Icons/Icon square 142.png
+    2162888: Assets/Resources/Icons/Icon square 300.png
+    2228424: Assets/Resources/Icons/Icon square 620.jpg
+  metroTileShortName: AR for VIPs
   metroCommandLineArgsFile: 
   metroTileShowName: 0
-  metroMediumTileShowName: 0
-  metroLargeTileShowName: 0
-  metroWideTileShowName: 0
+  metroMediumTileShowName: 1
+  metroLargeTileShowName: 1
+  metroWideTileShowName: 1
   metroDefaultTileSize: 1
   metroTileForegroundText: 2
   metroTileBackgroundColor: {r: 0.13333334, g: 0.17254902, b: 0.21568628, a: 0}

@@ -913,7 +913,7 @@ MonoBehaviour:
           m_CallState: 2
       m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
-  - Keyword: demo catpure text 3
+  - Keyword: demo capture text 3
     Response:
       m_PersistentCalls:
         m_Calls:
@@ -1086,7 +1086,7 @@ MonoBehaviour:
   sampleText:
   - Bus Stop 52
   - Bus Stop 80
-  - Wait for Pedestrians
+  - Watch for Pedestrians
   - 52
   - 80
   - AC Transit
@@ -1202,8 +1202,10 @@ MonoBehaviour:
     KeyCode: 285
   - Keyword: demo capture text 2
     KeyCode: 286
-  - Keyword: demo catpure text 3
+  - Keyword: demo capture text 3
     KeyCode: 287
+  - Keyword: read all text
+    KeyCode: 52
   recognitionConfidenceLevel: 1
 --- !u!1001 &1239819179
 Prefab:

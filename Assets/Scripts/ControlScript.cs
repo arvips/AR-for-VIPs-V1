@@ -65,6 +65,7 @@ public class ControlScript : MonoBehaviour {
     private GameObject repeatBeacon = null;
     private bool isRepeating = false;
     private Physics physics;
+    private bool captureTextRunning = false;
 
 
 
@@ -175,10 +176,32 @@ public class ControlScript : MonoBehaviour {
     {
         Debug.Log("Capture Text command activated");
         testCube.GetComponent<Renderer>().material.color = Color.blue;
-        TextManager.GetComponent<CameraManager>().BeginManualPhotoMode();
 
-        //Read all text that has just been placed
-        //StartCoroutine(ReadTextRoutine(true, true));
+        //Make sure capture text doesn't try to run while a previous instance is running!
+        //For now I'm putting in a simple time delay but this could be improved
+        StartCoroutine(CaptureTextRoutine());
+
+
+    }
+
+    public IEnumerator CaptureTextRoutine()
+    {
+        //Check whether capture text is running. If it's not, mark it as running, start it running, and wait 5 seconds before marking it done.
+
+        if (captureTextRunning == false)
+        {
+            captureTextRunning = true;
+            TextManager.GetComponent<CameraManager>().BeginManualPhotoMode();
+            WaitForSeconds wait = new WaitForSeconds(5);
+            yield return wait;
+            captureTextRunning = false;
+            Debug.Log("Ready for new capture.");
+        }
+        else
+        {
+            Debug.Log("Please wait for current capture to complete.");
+            yield return null;
+        }
     }
 
     public void ReadText ()
