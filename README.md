@@ -10,6 +10,8 @@ For information on HoloLens basics, application setup, and voice commands, see t
 
 For information on getting your Unity environment setup, including download links for HoloToolkit 2017.4.3.0, see this Google document: https://docs.google.com/document/d/1bbTqdkJNIzG7EznGzk95gs6i77JLNr2ljUWSFLjtj6E/edit?usp=sharing
 
+The text detection was largely based off of Jonathan Huang's paper - https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0210630. Github Link - https://github.com/eacooper/HoloLensSignARApp
+
 The remainder of this ReadMe will focus on the components in Github and what they do.
 
 ## Unity Hierarchy
