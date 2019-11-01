@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace HoloToolkit.Unity.InputModule
 {
-    [CustomEditor(typeof(SpeechInputSource))]
+    [CustomEditor(typeof(SpeechInputSource)), CanEditMultipleObjects]
     public class SpeechInputSourceEditor : Editor
     {
         private SerializedProperty persistentKeywordsProperty;

@@ -1037,7 +1037,7 @@ MonoBehaviour:
           m_CallState: 2
       m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
-  - Keyword: stop text
+  - Keyword: stop reading
     Response:
       m_PersistentCalls:
         m_Calls:
@@ -1251,7 +1251,7 @@ MonoBehaviour:
     KeyCode: 287
   - Keyword: read all text
     KeyCode: 52
-  - Keyword: stop text
+  - Keyword: stop reading
     KeyCode: 36
   recognitionConfidenceLevel: 1
 --- !u!1001 &1239819179

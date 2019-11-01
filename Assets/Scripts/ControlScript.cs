@@ -15,7 +15,7 @@ using System;
 /// </summary>
 
 [System.Serializable]
-public class ControlScript : MonoBehaviour, IInputClickHandler {
+public class ControlScript : MonoBehaviour {
 
     //Help field in inspector
     [SerializeField]
@@ -139,15 +139,14 @@ public class ControlScript : MonoBehaviour, IInputClickHandler {
                 break;
             //case TapState.ObjectSonification
         }
-  
         // Will change to object sonification instead of toggling obstacles
         //ObjectSonification();
 
         //On Tap, toggle obstacles on or off.
         //Debug.Log("Obstacle mode: " + GetComponentInParent<ObstacleBeaconScript>().obstacleMode);
-        
 
-        
+
+
 
         Debug.Log("Tap event registered");
     }
@@ -396,15 +395,31 @@ public class ControlScript : MonoBehaviour, IInputClickHandler {
                                 //Wait for length of clip.
                                 WaitForSeconds wait = new WaitForSeconds(clipLength);
 
-                                textBeaconFound = true;
-
+                                //textBeaconFound = true;
                                 //Debug.Log("Wait time: " + wait);
-                                yield return wait;
+                                //yield return wait;
+                                float count = 0f;
+                                while (count < clipLength)
+                                {
+                                    if (stopReading)
+                                    {
+                                        if (text.audioSourceFinal.isPlaying)
+                                        {
+                                            Debug.Log("stopping");
+                                            text.audioSourceFinal.Stop();
+                                        }
+                                    }
+                                    count += Time.deltaTime;
+                                    yield return null;
+                                }
                             }
                            
                         }
                     }
                 }
+
+                stopReading = false;
+                text = null;
 
                 if (!textBeaconFound)
                 {
