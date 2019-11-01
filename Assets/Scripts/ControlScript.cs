@@ -62,6 +62,7 @@ public class ControlScript : MonoBehaviour {
 
     private bool readTextRunning = false;
 
+    private bool skipText = false;
 
     private string repeatText = "No text to repeat.";
     private GameObject repeatBeacon = null;
@@ -232,6 +233,13 @@ public class ControlScript : MonoBehaviour {
             stopReading = true;
     }
 
+    public void SkipText()
+    {
+        Debug.Log("skipping raycast hit");
+        if (!skipText)
+            skipText = true;
+    }
+
     public IEnumerator CaptureTextRoutine()
     {
         //Check whether capture text is running. If it's not, mark it as running, start it running, and wait 5 seconds before marking it done.
@@ -328,6 +336,12 @@ public class ControlScript : MonoBehaviour {
                                     text.audioSourceFinal.Stop();
                                 }
                             }
+
+                            if(skipText)
+                            {
+                                skipText = false;
+                                break;
+                            }
                             count += Time.deltaTime;
                             yield return null;
                         }
@@ -385,12 +399,13 @@ public class ControlScript : MonoBehaviour {
 
                                 Debug.Log("CS: Text is: " + beaconText);
 
+                                TextToSpeechGoogle component = TextManager.GetComponent<TextToSpeechGoogle>();
                                 //Set audio source to that of the beacon
-                                TextManager.GetComponent<TextToSpeechGoogle>().audioSourceFinal = beacon.gameObject.GetComponent<AudioSource>();
+                                component.audioSourceFinal = beacon.gameObject.GetComponent<AudioSource>();
 
                                 //Start playback of current beacon
-                                TextManager.GetComponent<TextToSpeechGoogle>().playTextGoogle(beaconText);
-                                float clipLength = TextManager.GetComponent<TextToSpeechGoogle>().clipLength;
+                                component.playTextGoogle(beaconText);
+                                float clipLength = component.clipLength;
 
                                 //Wait for length of clip.
                                 WaitForSeconds wait = new WaitForSeconds(clipLength);
@@ -401,14 +416,16 @@ public class ControlScript : MonoBehaviour {
                                 float count = 0f;
                                 while (count < clipLength)
                                 {
-                                    if (stopReading)
+                                    if (stopReading || skipText)
                                     {
-                                        if (text.audioSourceFinal.isPlaying)
+                                        skipText = false;
+                                        if (component.audioSourceFinal.isPlaying)
                                         {
                                             Debug.Log("stopping");
-                                            text.audioSourceFinal.Stop();
+                                            component.audioSourceFinal.Stop();
                                         }
                                     }
+                                    
                                     count += Time.deltaTime;
                                     yield return null;
                                 }
@@ -419,7 +436,6 @@ public class ControlScript : MonoBehaviour {
                 }
 
                 stopReading = false;
-                text = null;
 
                 if (!textBeaconFound)
                 {
